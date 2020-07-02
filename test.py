@@ -1,6 +1,5 @@
 # %%
 # imports
-# initialize timeseries datastore with dummy data
 from report_generators.reg_prof_report_generator import populateRegProfSectionData
 from report_generators.ists_gen_section import populateIstsGenSectionData
 from report_generators.state_gen_section import populateStateGenSectionData
