@@ -7,21 +7,20 @@ from data_fetchers.inp_ts_data_store import getPntData
 from utils.excel_utils import saveDfToExcelSheet
 
 
-def populateIstsGenSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
-    sectionDataDf = getIstsGenSectionDataDf(configFilePath, configSheetName)
+def populateStateGenSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
+    sectionDataDf = getStateGenSectionDataDf(configFilePath, configSheetName)
     # dump data to excel
     saveDfToExcelSheet(outputFilePath, outputSheetName, sectionDataDf)
 
 
-def getIstsGenSectionDataDf(configFilePath, configSheetName):
+def getStateGenSectionDataDf(configFilePath, configSheetName):
     # get conf dataframe
     confDf = pd.read_excel(configFilePath, sheet_name=configSheetName)
     # confDf columns should be
-    # name,installed_capacity,avc_id,act_id,sch_id,type,pooling_station,gen_type
+    # name,installed_capacity,avc_id,act_id,sch_id,type,state
     confDf['name'] = confDf['name'].str.strip()
     confDf['type'] = confDf['type'].str.strip()
-    confDf['pooling_station'] = confDf['pooling_station'].str.strip()
-    confDf['gen_type'] = confDf['gen_type'].str.strip()
+    confDf['state'] = confDf['state'].str.strip()
     normalPntsConfDf = confDf[(confDf['type'] == 'normal') | (
         confDf['type'] == '') | (confDf['type'].isnull())]
 
@@ -32,7 +31,7 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
         confRow = confDf.iloc[rowIter]
         timeValSeries = getPntData('HRS')
 
-        # get the type of row, itcan be dummy / normal / agg_pool / agg_gen_type
+        # get the type of row, itcan be dummy / normal / agg_state
         rowType = confRow['type']
         if rowType == 'dummy':
             # since the row is dummy, just insert a None row into result
@@ -43,20 +42,13 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
                                 "day_min_actual_time": None, "sch_mu": None,
                                 "act_mu": None, "dev_mu": None, "cuf": None})
             continue
-        elif rowType == 'agg_pool':
-            poolStation = confRow['pooling_station']
-            # get all normal points that have the same pooling station
-            poolStationConfDf = normalPntsConfDf[normalPntsConfDf['pooling_station'] == poolStation]
-            avcPnt = ','.join(poolStationConfDf['avc_id'].tolist())
-            actPnt = ','.join(poolStationConfDf['act_id'].tolist())
-            schPnt = ','.join(poolStationConfDf['sch_id'].tolist())
-        elif rowType == 'agg_gen_type':
-            genType = confRow['gen_type']
-            # get all normal points that have the same pooling station
-            genTypeConfDf = normalPntsConfDf[normalPntsConfDf['gen_type'] == genType]
-            avcPnt = ','.join(genTypeConfDf['avc_id'].tolist())
-            actPnt = ','.join(genTypeConfDf['act_id'].tolist())
-            schPnt = ','.join(genTypeConfDf['sch_id'].tolist())
+        elif rowType == 'agg_state':
+            state = confRow['state']
+            # get all normal points that have the same state
+            stateConfDf = normalPntsConfDf[normalPntsConfDf['state'] == state]
+            avcPnt = ','.join(stateConfDf['avc_id'].tolist())
+            actPnt = ','.join(stateConfDf['act_id'].tolist())
+            schPnt = ','.join(stateConfDf['sch_id'].tolist())
         else:
             avcPnt = confRow['avc_id']
             actPnt = confRow['act_id']
