@@ -49,3 +49,9 @@ voltSummOutputSheet = 'volt_profile'
 populateVoltProfSectionData(
     configFilePath, voltSummConfigSheet, outputFilePath, voltSummOutputSheet)
 print('Voltage Profile report section data dump complete...')
+
+# %%
+# initialize prev day timeseries datastore with dummy data
+inp_ts_data_store.initPrevDummy()
+# x = inp_ts_data_store.tsDataDf
+print('prev day data store loading complete...')

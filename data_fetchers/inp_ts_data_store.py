@@ -1,6 +1,6 @@
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 # https://www.programiz.com/python-programming/global-keyword
-from data_fetchers.inp_ts_data_df_fetch import fetchDummyTsInpData
+from data_fetchers.inp_ts_data_df_fetch import fetchDummyTsInpData, fetchPrevDummyTsInpData
 from operator import add
 import re
 import pandas as pd
@@ -10,6 +10,9 @@ def initDummy():
     global tsDataDf
     tsDataDf = fetchDummyTsInpData()
 
+def initPrevDummy():
+    global tsPrevDataDf
+    tsPrevDataDf = fetchPrevDummyTsInpData()
 
 def getPntData(pnt):
     # returns a series of point data
