@@ -1,6 +1,6 @@
 '''
 create Regional Profile Section data in the column sequence
-name, installed_capacity, max_avc, day_max_actual, day_max_actual_time, day_min_actual, day_min_actual_time, sch_mu, act_mu, dev_mu, CUF
+name, installed_capacity, max_avc, day_max_actual, day_max_actual_time, day_min_actual, day_min_actual_time, sch_mu, act_mu, dev_mu, cuf
 '''
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
@@ -44,5 +44,5 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
                             "max_avc": maxAvc, "day_max_actual": dayMaxActual,
                             "day_max_actual_time": dayMaxActualTime, "day_min_actual": dayMinActual,
                             "day_min_actual_time": dayMinActualTime, "sch_mu": schMu,
-                            "act_mu": actMu, "dev_mu": devMu, "CUF": 0})
+                            "act_mu": actMu, "dev_mu": devMu, "cuf": 0})
     return pd.DataFrame(resValsList)
