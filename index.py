@@ -3,38 +3,49 @@
 from report_generators.reg_prof_report_generator import populateRegProfSectionData
 from report_generators.ists_gen_section import populateIstsGenSectionData
 from report_generators.state_gen_section import populateStateGenSectionData
+from report_generators.volt_profile_section import populateVoltProfSectionData
 from data_fetchers import inp_ts_data_store
+print('imports complete...')
+
 # %%
 # initialize timeseries datastore with dummy data
 inp_ts_data_store.initDummy()
 # x = inp_ts_data_store.tsDataDf
+print('data store loading complete...')
 
 # %%
 # config paths init
 configFilePath = "remc_report_config.xlsx"
 outputFilePath = "output/remc_report_output.xlsx"
 
-regSummConfigSheet = "section_1"
-regSummOutputSheet = "section_1"
-
-istsGenConfigSheet = "section_2"
-istsGenOutputSheet = "section_2"
-
-stateGenConfigSheet = "section_3"
-stateGenOutputSheet = "section_3"
-
 # %%
-# test regional profile report generation
+# regional profile report generation
+regSummConfigSheet = 'regional_profile'
+regSummOutputSheet = 'regional_profile'
 populateRegProfSectionData(
     configFilePath, regSummConfigSheet, outputFilePath, regSummOutputSheet)
-
+print('regional profile report section data dump complete...')
 
 # %%
-# test ists generation report generation
+# ists generation report generation
+istsGenConfigSheet = 'ists_gen'
+istsGenOutputSheet = 'ists_gen'
 populateIstsGenSectionData(
     configFilePath, istsGenConfigSheet, outputFilePath, istsGenOutputSheet)
+print('ISTS generation report section data dump complete...')
 
 # %%
-# test ists generation report generation
+# state generation report generation
+stateGenConfigSheet = 'state_gen'
+stateGenOutputSheet = 'state_gen'
 populateStateGenSectionData(
     configFilePath, stateGenConfigSheet, outputFilePath, stateGenOutputSheet)
+print('State generation report section data dump complete...')
+
+# %%
+# voltage profile report generation
+voltSummConfigSheet = 'volt_profile'
+voltSummOutputSheet = 'volt_profile'
+populateVoltProfSectionData(
+    configFilePath, voltSummConfigSheet, outputFilePath, voltSummOutputSheet)
+print('Voltage Profile report section data dump complete...')

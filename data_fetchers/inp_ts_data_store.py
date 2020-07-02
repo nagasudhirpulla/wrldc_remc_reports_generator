@@ -14,7 +14,9 @@ def initDummy():
 def getPntData(pnt):
     # returns a series of point data
     global tsDataDf
-    if "," in pnt:
+    if pnt == None:
+        return None
+    elif "," in pnt:
         return getPntsData(pnt.split(','))
     if "{" in pnt:
         return getEqPntData(pnt)
