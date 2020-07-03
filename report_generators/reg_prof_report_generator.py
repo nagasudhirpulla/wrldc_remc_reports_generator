@@ -12,20 +12,37 @@ def populateRegProfSectionData(configFilePath, configSheetName, outputFilePath, 
     # dump data to excel
     # saveDfToExcelSheet(outputFilePath, outputSheetName,
     #                   sectionDataDf, deleteSheet=True)
-    append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName, startrow=0, truncate_sheet=True, index=False, header=False)
+    append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName,
+                       startrow=0, truncate_sheet=True, index=False, header=False)
 
 
 def getRegProfSectionDataDf(configFilePath, configSheetName):
     # get conf dataframe
     confDf = pd.read_excel(configFilePath, sheet_name=configSheetName)
 
+    # confDf columns should be
+    # name, capacity, avc_point, actual_point, sch_point, type
+    confDf['name'] = confDf['name'].str.strip()
+    confDf['type'] = confDf['type'].str.strip()
+
     # initialize results
     resValsList = []
 
-    # confDf columns should be
-    # name, capacity, avc_point, actual_point, sch_point, type
     for rowIter in range(confDf.shape[0]):
         confRow = confDf.iloc[rowIter]
+
+        # get the type of row, itcan be dummy / normal
+        rowType = confRow['type']
+        if rowType == 'dummy':
+            # since the row is dummy, just insert a None row into result
+            resValsList.append({"name": confRow['name'],
+                                "installed_capacity": None,
+                                "max_avc": None, "day_max_actual": None,
+                                "day_max_actual_time": None, "day_min_actual": None,
+                                "day_min_actual_time": None, "sch_mu": None,
+                                "act_mu": None, "dev_mu": None, "cuf": None})
+            continue
+
         timeValSeries = getPntData('HRS')
 
         maxAvc = getPntData(confRow['avc_point']).max()
@@ -40,10 +57,11 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
         schMu = getPntData(confRow['sch_point']).mean()*0.024
         actMu = getPntData(confRow['actual_point']).mean()*0.024
         devMu = actMu - schMu
-        cufPerc = (actMu*2.4)/confRow['capacity']
+        installedCapacity = confRow['installed_capacity']
+        cufPerc = (actMu*2.4)/installedCapacity
 
         resValsList.append({"name": confRow['name'],
-                            "installed_capacity": confRow['capacity'],
+                            "installed_capacity": installedCapacity,
                             "max_avc": maxAvc, "day_max_actual": dayMaxActual,
                             "day_max_actual_time": dayMaxActualTime, "day_min_actual": dayMinActual,
                             "day_min_actual_time": dayMinActualTime, "sch_mu": schMu,

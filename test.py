@@ -52,6 +52,6 @@ print('Voltage Profile report section data dump complete...')
 
 # %%
 # initialize prev day timeseries datastore with dummy data
-#inp_ts_data_store.initPrevDummy()
+inp_ts_data_store.initPrevDummy()
 # x = inp_ts_data_store.tsDataDf
-# print('prev day data store loading complete...')
+print('prev day data store loading complete...')
