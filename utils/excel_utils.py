@@ -53,6 +53,11 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
 
     import pandas as pd
 
+    # edit by Nagasudhir as per requirement
+    if startrow == None and truncate_sheet == True:
+        startrow = 0
+    # edit by Nagasudhir as per requirement
+    
     # ignore [engine] parameter if it was passed
     if 'engine' in to_excel_kwargs:
         to_excel_kwargs.pop('engine')
