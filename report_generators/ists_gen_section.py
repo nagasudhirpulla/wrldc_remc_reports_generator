@@ -5,7 +5,7 @@ name,installed_capacity,max_avc,day_max_actual,day_max_actual_time,day_min_actua
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
 from utils.excel_utils import append_df_to_excel
-
+from utils.printUtils import printWithTs
 
 def populateIstsGenSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
     sectionDataDf = getIstsGenSectionDataDf(configFilePath, configSheetName)
@@ -31,6 +31,8 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
 
     for rowIter in range(confDf.shape[0]):
         confRow = confDf.iloc[rowIter]
+        printWithTs('ists gen processing row number {0}'.format(rowIter))
+        
         timeValSeries = getPntData('HRS')
 
         # get the type of row, itcan be dummy / normal / agg_pool / agg_gen_type

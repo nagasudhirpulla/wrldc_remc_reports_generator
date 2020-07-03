@@ -5,6 +5,7 @@ name,400_max,400_min,400_avg,220_max,220_min,220_avg
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
 from utils.excel_utils import append_df_to_excel
+from utils.printUtils import printWithTs
 
 
 def populateVoltProfSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
@@ -25,6 +26,7 @@ def getVoltProfSectionDataDf(configFilePath, configSheetName):
     # name,400_kv_pnt,220_kv_pnt,type
     for rowIter in range(confDf.shape[0]):
         confRow = confDf.iloc[rowIter]
+        printWithTs('voltage profile processing row number {0}'.format(rowIter))
 
         rowType = confRow['type']
         if rowType == 'dummy':

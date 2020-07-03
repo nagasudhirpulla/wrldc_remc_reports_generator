@@ -5,7 +5,7 @@ name, installed_capacity, max_avc, day_max_actual, day_max_actual_time, day_min_
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
 from utils.excel_utils import append_df_to_excel
-
+from utils.printUtils import printWithTs
 
 def populateRegProfSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
     sectionDataDf = getRegProfSectionDataDf(configFilePath, configSheetName)
@@ -27,6 +27,7 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
     resValsList = []
 
     for rowIter in range(confDf.shape[0]):
+        printWithTs('regional profile processing row number {0}'.format(rowIter))
         confRow = confDf.iloc[rowIter]
 
         # get the type of row, itcan be dummy / normal

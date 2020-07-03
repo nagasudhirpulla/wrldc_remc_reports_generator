@@ -5,6 +5,7 @@ name1,name2,name3,...
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
 from utils.excel_utils import append_df_to_excel
+from utils.printUtils import printWithTs
 
 
 def populateGraphDataSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
@@ -25,6 +26,7 @@ def getGraphDataSectionDataDf(configFilePath, configSheetName):
     # name, pnt, day_offset
     for rowIter in range(confDf.shape[0]):
         confRow = confDf.iloc[rowIter]
+        printWithTs('graph data processing row number {0}'.format(rowIter))
 
         name = confRow['name']
         pnt = confRow['pnt']

@@ -22,7 +22,7 @@ def getPntData(pnt, isPrev=False):
     global tsPrevDataDf
     if pnt == None:
         return None
-    elif "," in pnt:
+    if "," in pnt:
         return getPntsData(pnt.split(','), isPrev)
     if "{" in pnt:
         return getEqPntData(pnt, isPrev)
