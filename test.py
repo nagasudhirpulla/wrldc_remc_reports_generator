@@ -4,14 +4,23 @@ from report_generators.reg_prof_report_generator import populateRegProfSectionDa
 from report_generators.ists_gen_section import populateIstsGenSectionData
 from report_generators.state_gen_section import populateStateGenSectionData
 from report_generators.volt_profile_section import populateVoltProfSectionData
+from report_generators.graph_data_section import populateGraphDataSectionData
 from data_fetchers import inp_ts_data_store
-print('imports complete...')
+import datetime as dt
+
+
+def printWithTs(printStr):
+    print('{0}: {1}'.format(dt.datetime.strftime(
+        dt.datetime.now(), '%Y-%b-%d %H:%M:%S'), printStr))
+
+
+printWithTs('imports complete...')
 
 # %%
 # initialize timeseries datastore with dummy data
 inp_ts_data_store.initDummy()
 # x = inp_ts_data_store.tsDataDf
-print('data store loading complete...')
+printWithTs('data store loading complete...')
 
 # %%
 # config paths init
@@ -21,37 +30,45 @@ outputFilePath = "output/remc_report_output.xlsx"
 # %%
 # regional profile report generation
 regSummConfigSheet = 'regional_profile'
-regSummOutputSheet = 'report'
+regSummOutputSheet = 'Daily REMC Report_Part1'
 populateRegProfSectionData(
-    configFilePath, regSummConfigSheet, outputFilePath, regSummOutputSheet)
-print('regional profile report section data dump complete...')
+    configFilePath, regSummConfigSheet, outputFilePath, regSummOutputSheet, truncateSheet=True)
+printWithTs('regional profile report section data dump complete...')
 
 # %%
 # ists generation report generation
 istsGenConfigSheet = 'ists_gen'
-istsGenOutputSheet = 'report'
+istsGenOutputSheet = 'Daily REMC Report_Part1'
 populateIstsGenSectionData(
     configFilePath, istsGenConfigSheet, outputFilePath, istsGenOutputSheet)
-print('ISTS generation report section data dump complete...')
+printWithTs('ISTS generation report section data dump complete...')
 
 # %%
 # state generation report generation
 stateGenConfigSheet = 'state_gen'
-stateGenOutputSheet = 'report'
+stateGenOutputSheet = 'Daily REMC Report_Part1'
 populateStateGenSectionData(
     configFilePath, stateGenConfigSheet, outputFilePath, stateGenOutputSheet)
-print('State generation report section data dump complete...')
+printWithTs('State generation report section data dump complete...')
 
 # %%
 # voltage profile report generation
 voltSummConfigSheet = 'volt_profile'
-voltSummOutputSheet = 'report'
+voltSummOutputSheet = 'Daily REMC Report_Part2'
 populateVoltProfSectionData(
-    configFilePath, voltSummConfigSheet, outputFilePath, voltSummOutputSheet)
-print('Voltage Profile report section data dump complete...')
+    configFilePath, voltSummConfigSheet, outputFilePath, voltSummOutputSheet, truncateSheet=True)
+printWithTs('Voltage Profile report section data dump complete...')
 
 # %%
 # initialize prev day timeseries datastore with dummy data
 inp_ts_data_store.initPrevDummy()
 # x = inp_ts_data_store.tsDataDf
-print('prev day data store loading complete...')
+printWithTs('prev day data store loading complete...')
+
+# %%
+# graph data report generation
+graphDataConfigSheet = 'graph_data'
+graphDataOutputSheet = 'graph_data'
+populateGraphDataSectionData(
+    configFilePath, graphDataConfigSheet, outputFilePath, graphDataOutputSheet)
+printWithTs('Graph data report section data dump complete...')

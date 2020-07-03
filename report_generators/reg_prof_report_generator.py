@@ -4,16 +4,14 @@ name, installed_capacity, max_avc, day_max_actual, day_max_actual_time, day_min_
 '''
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
-from utils.excel_utils import saveDfToExcelSheet, append_df_to_excel
+from utils.excel_utils import append_df_to_excel
 
 
-def populateRegProfSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
+def populateRegProfSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
     sectionDataDf = getRegProfSectionDataDf(configFilePath, configSheetName)
     # dump data to excel
-    # saveDfToExcelSheet(outputFilePath, outputSheetName,
-    #                   sectionDataDf, deleteSheet=True)
     append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName,
-                       startrow=0, truncate_sheet=True, index=False, header=False)
+                       startrow=0, truncate_sheet=truncateSheet, index=False, header=False)
 
 
 def getRegProfSectionDataDf(configFilePath, configSheetName):

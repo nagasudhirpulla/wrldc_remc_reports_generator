@@ -10,42 +10,51 @@ def initDummy():
     global tsDataDf
     tsDataDf = fetchDummyTsInpData()
 
+
 def initPrevDummy():
     global tsPrevDataDf
     tsPrevDataDf = fetchPrevDummyTsInpData()
 
-def getPntData(pnt):
+
+def getPntData(pnt, isPrev=False):
     # returns a series of point data
     global tsDataDf
+    global tsPrevDataDf
     if pnt == None:
         return None
     elif "," in pnt:
-        return getPntsData(pnt.split(','))
+        return getPntsData(pnt.split(','), isPrev)
     if "{" in pnt:
-        return getEqPntData(pnt)
+        return getEqPntData(pnt, isPrev)
     else:
+        if isPrev == True:
+            return tsPrevDataDf[pnt]
         return tsDataDf[pnt]
 
 
-def getSinglePntData(pnt):
+def getSinglePntData(pnt, isPrev=False):
     # returns a series of point data
     global tsDataDf
+    global tsPrevDataDf
+    if isPrev == True:
+        return tsPrevDataDf[pnt.replace(' ', '')]
     return tsDataDf[pnt.replace(' ', '')]
 
 
-def getPntsData(pnts):
+def getPntsData(pnts, isPrev=False):
     # returns a sum of points data
     # https://stackoverflow.com/questions/18713321/element-wise-addition-of-2-lists
     if len(pnts) == 0:
         return None
-    resVals = getPntData(pnts[0])
+    resVals = getPntData(pnts[0], isPrev)
     for pnt in pnts[1:]:
-        resVals = list(map(add, resVals, getPntData(pnt)))
+        resVals = list(map(add, resVals, getPntData(pnt, isPrev)))
     return pd.Series(resVals)
 
 
-def getEqPntData(pntEq):
+def getEqPntData(pntEq, isPrev=False):
     global tsDataDf
+    global tsPrevDataDf
     # returns data for points equation like {a}+{b}-{x}
     # https://stackoverflow.com/a/4894134/2746323
     pnts = re.findall('{.*?}', pntEq.replace(' ', ''))
@@ -53,10 +62,19 @@ def getEqPntData(pntEq):
     numericEq = pntEq.replace('{', '').replace('}', '')
     resVals = []
     # iterate through each timestamp of the datastore
-    for samplItr in (tsDataDf.shape[0]):
+    if isPrev == True:
+        numStoreRows = tsPrevDataDf.shape[0]
+    else:
+        numStoreRows = tsDataDf.shape[0]
+    for samplItr in range(numStoreRows):
         samplEq = numericEq
         for pnt in pnts:
-            samplEq = samplEq.replace(pnt, str(tsDataDf[pnt].iloc[samplItr]))
+            if isPrev == True:
+                samplEq = samplEq.replace(
+                    pnt, str(tsPrevDataDf[pnt].iloc[samplItr]))
+            else:
+                samplEq = samplEq.replace(
+                    pnt, str(tsDataDf[pnt].iloc[samplItr]))
         sampleVal = eval(samplEq)
         resVals.append(sampleVal)
     return pd.Series(resVals)
