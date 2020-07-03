@@ -4,14 +4,14 @@ name,400_max,400_min,400_avg,220_max,220_min,220_avg
 '''
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
-from utils.excel_utils import saveDfToExcelSheet
+from utils.excel_utils import saveDfToExcelSheet, append_df_to_excel
 
 
 def populateVoltProfSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
     sectionDataDf = getVoltProfSectionDataDf(configFilePath, configSheetName)
     # dump data to excel
-    saveDfToExcelSheet(outputFilePath, outputSheetName, sectionDataDf)
-
+    # saveDfToExcelSheet(outputFilePath, outputSheetName, sectionDataDf)
+    append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName, startrow=None, truncate_sheet=False, index=False, header=False)
 
 def getVoltProfSectionDataDf(configFilePath, configSheetName):
     # get conf dataframe

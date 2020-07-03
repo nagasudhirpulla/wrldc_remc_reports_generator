@@ -4,13 +4,15 @@ name, installed_capacity, max_avc, day_max_actual, day_max_actual_time, day_min_
 '''
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
-from utils.excel_utils import saveDfToExcelSheet
+from utils.excel_utils import saveDfToExcelSheet, append_df_to_excel
 
 
 def populateRegProfSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
     sectionDataDf = getRegProfSectionDataDf(configFilePath, configSheetName)
     # dump data to excel
-    saveDfToExcelSheet(outputFilePath, outputSheetName, sectionDataDf)
+    # saveDfToExcelSheet(outputFilePath, outputSheetName,
+    #                   sectionDataDf, deleteSheet=True)
+    append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName, startrow=0, truncate_sheet=True, index=False, header=False)
 
 
 def getRegProfSectionDataDf(configFilePath, configSheetName):
@@ -38,11 +40,12 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
         schMu = getPntData(confRow['sch_point']).mean()*0.024
         actMu = getPntData(confRow['actual_point']).mean()*0.024
         devMu = actMu - schMu
+        cufPerc = (actMu*2.4)/confRow['capacity']
 
         resValsList.append({"name": confRow['name'],
                             "installed_capacity": confRow['capacity'],
                             "max_avc": maxAvc, "day_max_actual": dayMaxActual,
                             "day_max_actual_time": dayMaxActualTime, "day_min_actual": dayMinActual,
                             "day_min_actual_time": dayMinActualTime, "sch_mu": schMu,
-                            "act_mu": actMu, "dev_mu": devMu, "cuf": 0})
+                            "act_mu": actMu, "dev_mu": devMu, "cuf": cufPerc})
     return pd.DataFrame(resValsList)

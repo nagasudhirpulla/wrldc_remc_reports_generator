@@ -1,7 +1,7 @@
 # wrldc_remc_reports_generator
 
 ## todos
-* CUF implementation
+* CUF implementation - actual mu  / installed capacity*0.024 * 100%
 * config of regional profile section
 * config of ists gen section
 * config of state gen section

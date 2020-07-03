@@ -4,13 +4,14 @@ name,installed_capacity,max_avc,day_max_actual,day_max_actual_time,day_min_actua
 '''
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
-from utils.excel_utils import saveDfToExcelSheet
+from utils.excel_utils import saveDfToExcelSheet, append_df_to_excel
 
 
 def populateIstsGenSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
     sectionDataDf = getIstsGenSectionDataDf(configFilePath, configSheetName)
     # dump data to excel
-    saveDfToExcelSheet(outputFilePath, outputSheetName, sectionDataDf)
+    # saveDfToExcelSheet(outputFilePath, outputSheetName, sectionDataDf)
+    append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName, startrow=None, truncate_sheet=False, index=False, header=False)
 
 
 def getIstsGenSectionDataDf(configFilePath, configSheetName):
@@ -72,11 +73,13 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
         schMu = getPntData(schPnt).mean()*0.024
         actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
+        installedCapacity = confRow['installed_capacity']
+        cufPerc = (actMu*2.4)/installedCapacity
 
         resValsList.append({"name": confRow['name'],
-                            "installed_capacity": confRow['installed_capacity'],
+                            "installed_capacity": installedCapacity,
                             "max_avc": maxAvc, "day_max_actual": dayMaxActual,
                             "day_max_actual_time": dayMaxActualTime, "day_min_actual": dayMinActual,
                             "day_min_actual_time": dayMinActualTime, "sch_mu": schMu,
-                            "act_mu": actMu, "dev_mu": devMu, "cuf": 0})
+                            "act_mu": actMu, "dev_mu": devMu, "cuf": cufPerc})
     return pd.DataFrame(resValsList)
