@@ -7,6 +7,7 @@ from data_fetchers.inp_ts_data_store import getPntData
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
 
+
 def populateRegProfSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
     sectionDataDf = getRegProfSectionDataDf(configFilePath, configSheetName)
     # dump data to excel
@@ -27,7 +28,8 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
     resValsList = []
 
     for rowIter in range(confDf.shape[0]):
-        printWithTs('regional profile processing row number {0}'.format(rowIter))
+        printWithTs(
+            'regional profile processing row number {0}'.format(rowIter+2))
         confRow = confDf.iloc[rowIter]
 
         # get the type of row, itcan be dummy / normal

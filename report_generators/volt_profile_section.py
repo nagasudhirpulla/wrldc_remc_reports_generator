@@ -26,7 +26,8 @@ def getVoltProfSectionDataDf(configFilePath, configSheetName):
     # name,400_kv_pnt,220_kv_pnt,type
     for rowIter in range(confDf.shape[0]):
         confRow = confDf.iloc[rowIter]
-        printWithTs('voltage profile processing row number {0}'.format(rowIter))
+        printWithTs(
+            'voltage profile processing row number {0}'.format(rowIter+2))
 
         rowType = confRow['type']
         if rowType == 'dummy':

@@ -26,7 +26,7 @@ def getGraphDataSectionDataDf(configFilePath, configSheetName):
     # name, pnt, day_offset
     for rowIter in range(confDf.shape[0]):
         confRow = confDf.iloc[rowIter]
-        printWithTs('graph data processing row number {0}'.format(rowIter))
+        printWithTs('graph data processing row number {0}'.format(rowIter+2))
 
         name = confRow['name']
         pnt = confRow['pnt']

@@ -1,6 +1,6 @@
 # %%
 # imports
-from report_generators.reg_prof_report_generator import populateRegProfSectionData
+from report_generators.reg_prof_section import populateRegProfSectionData
 from report_generators.ists_gen_section import populateIstsGenSectionData
 from report_generators.state_gen_section import populateStateGenSectionData
 from report_generators.volt_profile_section import populateVoltProfSectionData
@@ -22,7 +22,7 @@ printWithTs('data store loading complete...', clr='green')
 # %%
 # config paths init
 configFilePath = "remc_report_config.xlsx"
-outputFilePath = "output/remc_report_output.xlsx"
+outputFilePath = "output/report_output_data.xlsx"
 
 # %%
 # parse arguments when invoked directly
