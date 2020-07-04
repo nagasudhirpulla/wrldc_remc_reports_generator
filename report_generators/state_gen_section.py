@@ -45,13 +45,14 @@ def getStateGenSectionDataDf(configFilePath, configSheetName):
                                 "day_min_actual_time": None, "sch_mu": None,
                                 "act_mu": None, "dev_mu": None, "cuf": None})
             continue
-        elif rowType == 'agg_state':
-            state = confRow['state']
-            # get all normal points that have the same state
-            stateConfDf = normalPntsConfDf[normalPntsConfDf['state'] == state]
-            avcPnt = ','.join(stateConfDf['avc_id'].tolist())
-            actPnt = ','.join(stateConfDf['act_id'].tolist())
-            schPnt = ','.join(stateConfDf['sch_id'].tolist())
+        elif not(pd.isnull(rowType)) and rowType.startswith('agg_'):
+            aggColName = rowType[len('agg_'):]
+            aggIdentifier = confRow[aggColName]
+            confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
+                                            == aggIdentifier]
+            avcPnt = ','.join(confDfForAgg['avc_id'].tolist())
+            actPnt = ','.join(confDfForAgg['act_id'].tolist())
+            schPnt = ','.join(confDfForAgg['sch_id'].tolist())
         else:
             avcPnt = confRow['avc_id']
             actPnt = confRow['act_id']

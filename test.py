@@ -21,7 +21,7 @@ printWithTs('data store loading complete...', clr='green')
 
 # %%
 # config paths init
-configFilePath = "remc_report_config.xlsx"
+configFilePath = "config/remc_report_config.xlsx"
 outputFilePath = "output/report_output_data.xlsx"
 
 # %%
