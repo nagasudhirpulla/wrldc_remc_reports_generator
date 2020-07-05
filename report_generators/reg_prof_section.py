@@ -46,7 +46,12 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
 
         timeValSeries = getPntData('HRS')
 
-        maxAvc = getPntData(confRow['avc_point']).max()
+        avcPnt = confRow['avc_point']
+        if ((avcPnt == '') or pd.isnull(avcPnt)):
+            maxAvc = None
+        else:
+            maxAvc = getPntData(avcPnt).max()
+        
         dayMaxActual = getPntData(confRow['actual_point']).max()
         dayMaxActualTime = timeValSeries.iloc[getPntData(
             confRow['actual_point']).idxmax()]

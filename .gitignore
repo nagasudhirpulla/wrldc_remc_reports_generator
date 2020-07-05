@@ -10,5 +10,8 @@
 
 output/*.xlsx
 dummy_data/*.xlsx
+build/*
+dist/*
+*.spec
 
 __pycache__/

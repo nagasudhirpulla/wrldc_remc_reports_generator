@@ -50,7 +50,7 @@ def getStateGenSectionDataDf(configFilePath, configSheetName):
             aggIdentifier = confRow[aggColName]
             confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
                                             == aggIdentifier]
-            avcPnt = ','.join(confDfForAgg['avc_id'].tolist())
+            avcPnt = ','.join(confDfForAgg['avc_id'].dropna().tolist())
             actPnt = ','.join(confDfForAgg['act_id'].tolist())
             schPnt = ','.join(confDfForAgg['sch_id'].tolist())
         else:
@@ -58,7 +58,10 @@ def getStateGenSectionDataDf(configFilePath, configSheetName):
             actPnt = confRow['act_id']
             schPnt = confRow['sch_id']
 
-        maxAvc = getPntData(avcPnt).max()
+        if ((avcPnt == '') or pd.isnull(avcPnt)):
+            maxAvc = None
+        else:
+            maxAvc = getPntData(avcPnt).max()
         dayMaxActual = getPntData(actPnt).max()
         dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]
 

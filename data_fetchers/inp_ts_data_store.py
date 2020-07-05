@@ -20,7 +20,7 @@ def getPntData(pnt, isPrev=False):
     # returns a series of point data
     global tsDataDf
     global tsPrevDataDf
-    if pnt == None:
+    if (pd.isnull(pnt) or (pnt == '')):
         return None
     if "," in pnt:
         return getPntsData(pnt.split(','), isPrev)
@@ -48,6 +48,8 @@ def getPntsData(pnts, isPrev=False):
         return None
     resVals = getPntData(pnts[0], isPrev)
     for pnt in pnts[1:]:
+        if (pd.isnull(pnt) or (pnt == '')):
+            continue
         resVals = list(map(add, resVals, getPntData(pnt, isPrev)))
     return pd.Series(resVals)
 
