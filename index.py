@@ -9,20 +9,22 @@ from data_fetchers import inp_ts_data_store
 import datetime as dt
 import argparse
 from utils.printUtils import printWithTs
+from report_generators.paste_report_data import pasteDataToTemplateFile
 
 printWithTs('imports complete...', clr='green')
 
 
 # %%
-# initialize timeseries datastore with dummy data
-inp_ts_data_store.initDummy()
+# initialize timeseries datastore
+inp_ts_data_store.initData()
 # x = inp_ts_data_store.tsDataDf
 printWithTs('data store loading complete...', clr='green')
 
 # %%
-# config paths init
+# file paths init
 configFilePath = "config/remc_report_config.xlsx"
 outputFilePath = "output/report_output_data.xlsx"
+templateFilePath = 'output/report_template.xlsx'
 
 # %%
 # parse arguments when invoked directly
@@ -32,11 +34,14 @@ parser.add_argument(
     '--config', help='filePath of config file', default=configFilePath)
 parser.add_argument(
     '--output', help='filePath of config file', default=outputFilePath)
+parser.add_argument(
+    '--template', help='filePath of template file', default=templateFilePath)
 args = parser.parse_args()
 
 # read arguments
 configFilePath = args.config
 outputFilePath = args.output
+templateFilePath = args.template
 printWithTs('parsing input arguments done...', clr='green')
 
 # %%
@@ -72,15 +77,20 @@ populateVoltProfSectionData(
 printWithTs('Voltage Profile report section data dump complete...', clr='green')
 
 # %%
-# initialize prev day timeseries datastore with dummy data
-inp_ts_data_store.initPrevDummy()
+# initialize prev day timeseries datastore
+inp_ts_data_store.initPrevData()
 # x = inp_ts_data_store.tsDataDf
 printWithTs('prev day data store loading complete...', clr='green')
 
 # %%
-# graph data report generation
+## graph data report generation
 graphDataConfigSheet = 'graph_data'
 graphDataOutputSheet = 'graph_data'
 populateGraphDataSectionData(
-    configFilePath, graphDataConfigSheet, outputFilePath, graphDataOutputSheet)
+    configFilePath, graphDataConfigSheet, templateFilePath, graphDataOutputSheet)
 printWithTs('Graph data report section data dump complete...', clr='green')
+
+# %%
+## pasting data from date file to template file
+pasteDataToTemplateFile(outputFilePath, templateFilePath)
+printWithTs('Data pasting done from data file to template file...', clr='green')

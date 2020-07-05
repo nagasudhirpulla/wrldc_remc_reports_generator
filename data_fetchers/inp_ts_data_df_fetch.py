@@ -1,19 +1,19 @@
-from data_fetchers.ists_gen_df_fetch import fetchDummyIstsGenDf, fetchDummyPrevIstsGenDf
-from data_fetchers.tot_gen_df_fetch import fetchDummyTotGenDf, fetchDummyPrevTotGenDf
-from data_fetchers.volt_df_fetch import fetchDummyVoltDf, fetchDummyPrevVoltDf
+from data_fetchers.ists_gen_df_fetch import fetchIstsGenDf, fetchPrevIstsGenDf
+from data_fetchers.tot_gen_df_fetch import fetchTotGenDf, fetchPrevTotGenDf
+from data_fetchers.volt_df_fetch import fetchVoltDf, fetchPrevVoltDf
 
 
-def fetchDummyTsInpData():
-    istsGenDf = fetchDummyIstsGenDf()
-    totGenDf = fetchDummyTotGenDf()
-    voltDf = fetchDummyVoltDf()
+def fetchTsInpData():
+    istsGenDf = fetchIstsGenDf()
+    totGenDf = fetchTotGenDf()
+    voltDf = fetchVoltDf()
     inpTsDataDf = istsGenDf.merge(totGenDf, on='HRS').merge(voltDf, on='HRS')
     return inpTsDataDf
 
 
-def fetchPrevDummyTsInpData():
-    istsGenDf = fetchDummyPrevIstsGenDf()
-    totGenDf = fetchDummyPrevTotGenDf()
-    voltDf = fetchDummyPrevVoltDf()
+def fetchPrevTsInpData():
+    istsGenDf = fetchPrevIstsGenDf()
+    totGenDf = fetchPrevTotGenDf()
+    voltDf = fetchPrevVoltDf()
     inpTsDataDf = istsGenDf.merge(totGenDf, on='HRS').merge(voltDf, on='HRS')
     return inpTsDataDf

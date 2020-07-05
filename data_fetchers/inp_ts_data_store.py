@@ -1,19 +1,19 @@
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 # https://www.programiz.com/python-programming/global-keyword
-from data_fetchers.inp_ts_data_df_fetch import fetchDummyTsInpData, fetchPrevDummyTsInpData
+from data_fetchers.inp_ts_data_df_fetch import fetchTsInpData, fetchPrevTsInpData
 from operator import add
 import re
 import pandas as pd
 
 
-def initDummy():
+def initData():
     global tsDataDf
-    tsDataDf = fetchDummyTsInpData()
+    tsDataDf = fetchTsInpData()
 
 
-def initPrevDummy():
+def initPrevData():
     global tsPrevDataDf
-    tsPrevDataDf = fetchPrevDummyTsInpData()
+    tsPrevDataDf = fetchPrevTsInpData()
 
 
 def getPntData(pnt, isPrev=False):
