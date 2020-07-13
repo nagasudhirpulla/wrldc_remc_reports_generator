@@ -3,13 +3,16 @@ from utils.printUtils import printWithTs
 
 
 def pasteDataToTemplateFile(dataFile, templateFile):
+    printWithTs('loading data file data into a dataframe', clr='magenta')
     # open an Excel file and return a workbook
     dataWb = load_workbook(dataFile, read_only=True)
     dataFileSheetNames = [sht for sht in dataWb.sheetnames]
 
+    printWithTs('loading template file', clr='magenta')
     templWb = load_workbook(templateFile)
     templFileSheetNames = [sht for sht in templWb.sheetnames]
 
+    printWithTs('started pasting data to template', clr='magenta')
     # print(dataFileSheetNames)
     # iterate through each sheet of data file for copying
     # https://www.geeksforgeeks.org/python-how-to-copy-data-from-one-excel-sheet-to-another/
@@ -37,6 +40,7 @@ def pasteDataToTemplateFile(dataFile, templateFile):
                 templWb[dataShtName].cell(
                     row=rowIter, column=colIter).value = cellVal
 
+    printWithTs('done pasting data to template', clr='green')
     # saving the destination excel file
     printWithTs('Saving report template after pasting')
     templWb.save(str(templateFile))

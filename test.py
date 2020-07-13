@@ -15,6 +15,7 @@ from report_generators.remc_ists_rmse_section import populateRemcIstsRmseSection
 from report_generators.remc_state_rmse_section import populateRemcStateRmseSectionData
 from report_generators.remc_reg_da_section import populateRemcRegDaSummSectionData
 from report_generators.remc_ists_da_section import populateRemcIstsDaSummSectionData
+from report_generators.remc_state_da_section import populateRemcStateDaSummSectionData
 from data_fetchers import inp_ts_data_store
 from data_fetchers.remc_data_store import loadRemcDataStore, deleteRemcDataStore
 from data_fetchers.remc_data_store import FCA_FORECAST_VS_ACTUAL_STORE_NAME, FCA_DAY_AHEAD_STORE_NAME
@@ -260,6 +261,16 @@ istsDaOutputSheet = 'Daily REMC Report_Part3'
 populateRemcIstsDaSummSectionData(
     configFilePath, istsDaConfigSheet, outputFilePath, istsDaOutputSheet, truncateSheet=False)
 printWithTs('REMC Ists Day Ahead data dump complete...', clr='green')
+
+# %%
+printWithTs(
+    'started REMC State Day Ahead report generation...', clr='magenta')
+# REMC Ists Day Ahead report
+stateDaConfigSheet = 'state_da_forecast'
+stateDaOutputSheet = 'Daily REMC Report_Part3'
+populateRemcStateDaSummSectionData(
+    configFilePath, stateDaConfigSheet, outputFilePath, stateDaOutputSheet, truncateSheet=False)
+printWithTs('REMC State Day Ahead data dump complete...', clr='green')
 
 
 # %%
