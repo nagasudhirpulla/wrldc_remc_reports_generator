@@ -1,7 +1,7 @@
 
 '''
 all the inputs are lists
-output will be a list of errors wrt Forecast
+output will be a list of errors wrt AVC
 
 Steps:
 errWrtAvc = (actual-forecast)*100/avc
@@ -12,7 +12,7 @@ def calcErrPercWithRespectToAvc(actVals, forecastVals, avcVals):
     if (len(actVals) != len(forecastVals)) and (len(actVals) != len(avcVals)):
         return None
     errVals = []
-    for valIter in len(actVals):
+    for valIter in range(len(actVals)):
         errVal = (actVals[valIter] - forecastVals[valIter]) * \
             100/avcVals[valIter]
         errVals.append(errVal)
@@ -33,12 +33,33 @@ def calcErrPercWithRespectToForecast(actVals, forecastVals, avcVals):
     if (len(actVals) != len(forecastVals)) and (len(actVals) != len(avcVals)):
         return None
     errVals = []
-    for valIter in len(actVals):
+    for valIter in range(len(actVals)):
         errVal = (actVals[valIter] - forecastVals[valIter]) * \
             100/forecastVals[valIter]
         errVals.append(errVal)
     return errVals
 
+
+'''
+all the inputs are lists
+output will be number, i.e., RMSE %
+
+steps:
+errSquare = (actual-forecast)^2
+errMeanSquare = Summation(errSquare)/num_of_blks
+rootMeanSquareError = Sqrt(errMeanSquare)
+'''
+
+
+def calcRmsePerc(actVals, forecastVals):
+    if (len(actVals) != len(forecastVals)):
+        return None
+    rmse = 0
+    for valIter in range(len(actVals)):
+        errSquare = (actVals[valIter] - forecastVals[valIter])**2
+        rmse = rmse + errSquare
+    rmse = (rmse/len(actVals))**0.5
+    return rmse
 
 
 '''
@@ -59,7 +80,7 @@ def calcNrmsePerc(actVals, forecastVals, avcVals):
         return None
     nrmse = 0
     avcMean = 0
-    for valIter in len(actVals):
+    for valIter in range(len(actVals)):
         errSquare = (actVals[valIter] - forecastVals[valIter])**2
         nrmse = nrmse + errSquare
         avcMean = avcMean + avcVals[valIter]
@@ -85,7 +106,7 @@ def calcMapePerc(actVals, forecastVals, avcVals):
     if (len(actVals) != len(forecastVals)) and (len(actVals) != len(avcVals)):
         return None
     mape = 0
-    for valIter in len(actVals):
+    for valIter in range(len(actVals)):
         mape = mape + abs(actVals[valIter] -
                           forecastVals[valIter])/avcVals[valIter]
 
@@ -110,7 +131,7 @@ def calcNmae(actVals, forecastVals, avcVals):
         return None
     nmae = 0
     avcMean = 0
-    for valIter in len(actVals):
+    for valIter in range(len(actVals)):
         nmae = nmae + abs(actVals[valIter] -
                           forecastVals[valIter])
         avcMean = avcMean + avcVals[valIter]

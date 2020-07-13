@@ -32,10 +32,12 @@ def pasteDataToTemplateFile(dataFile, templateFile):
                 continue
             # copy cell values from data sheet to template sheet
             for colIter in range(1, maxCols+1):
+                printWithTs('pasting row={0}, col={1}'.format(rowIter, colIter))
                 cellVal = dataSht.cell(row=rowIter, column=colIter).value
                 templWb[dataShtName].cell(
                     row=rowIter, column=colIter).value = cellVal
 
     # saving the destination excel file
+    printWithTs('Saving report template after pasting')
     templWb.save(str(templateFile))
     dataWb.close()

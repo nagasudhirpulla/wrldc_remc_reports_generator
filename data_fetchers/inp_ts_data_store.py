@@ -17,7 +17,7 @@ def initPrevData():
 
 
 def getPntData(pnt, isPrev=False):
-    # returns a series of point data
+    # returns a pandas series of point data
     global tsDataDf
     global tsPrevDataDf
     if (pd.isnull(pnt) or (pnt == '')):
@@ -33,7 +33,7 @@ def getPntData(pnt, isPrev=False):
 
 
 def getSinglePntData(pnt, isPrev=False):
-    # returns a series of point data
+    # returns a pandas series of point data
     global tsDataDf
     global tsPrevDataDf
     if isPrev == True:
