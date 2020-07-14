@@ -4,7 +4,7 @@ from report_generators.reg_prof_section import populateRegProfSectionData
 from report_generators.ists_gen_section import populateIstsGenSectionData
 from report_generators.state_gen_section import populateStateGenSectionData
 from report_generators.volt_profile_section import populateVoltProfSectionData
-from report_generators.graph_data_section import populateGraphDataSectionData
+from report_generators.scada_graph_data_section import populateScadaGraphDataSectionData
 from report_generators.remc_reg_r0_err_section import populateRemcRegionalR0ErrSectionData
 from report_generators.remc_reg_r16_err_section import populateRemcRegionalR16ErrSectionData
 from report_generators.remc_ists_err_section import populateRemcIstsErrSummSectionData
@@ -16,9 +16,10 @@ from report_generators.remc_state_rmse_section import populateRemcStateRmseSecti
 from report_generators.remc_reg_da_section import populateRemcRegDaSummSectionData
 from report_generators.remc_ists_da_section import populateRemcIstsDaSummSectionData
 from report_generators.remc_state_da_section import populateRemcStateDaSummSectionData
+from report_generators.remc_graph_data_section import populateRemcGraphDataSectionData
 from data_fetchers import inp_ts_data_store
 from data_fetchers.remc_data_store import loadRemcDataStore, deleteRemcDataStore
-from data_fetchers.remc_data_store import FCA_FORECAST_VS_ACTUAL_STORE_NAME, FCA_DAY_AHEAD_STORE_NAME
+from data_fetchers.remc_data_store import FCA_FORECAST_VS_ACTUAL_STORE_NAME, FCA_DAY_AHEAD_STORE_NAME, FCA_FORECAST_VS_ACTUAL_PREV_STORE_NAME
 from data_fetchers.remc_data_store import IFT_FORECAST_VS_ACTUAL_STORE_NAME, IFT_DAY_AHEAD_STORE_NAME
 from data_fetchers.remc_data_store import ALEA_FORECAST_VS_ACTUAL_STORE_NAME, ALEA_DAY_AHEAD_STORE_NAME
 from data_fetchers.remc_data_store import RES_FORECAST_VS_ACTUAL_STORE_NAME, RES_DAY_AHEAD_STORE_NAME
@@ -297,11 +298,34 @@ printWithTs('prev day data store loading complete...', clr='green')
 # %%
 printWithTs('started SCADA graph data report generation...', clr='magenta')
 ## graph data report generation
-graphDataConfigSheet = 'scada_graph_data'
-graphDataOutputSheet = 'scada_graph_data'
-populateGraphDataSectionData(
+scadaGraphDataConfigSheet = 'scada_graph_data'
+scadaGraphDataOutputSheet = 'scada_graph_data'
+populateScadaGraphDataSectionData(
+    configFilePath, scadaGraphDataConfigSheet, templateFilePath, scadaGraphDataOutputSheet)
+printWithTs('SCADA Graph data report section data dump complete...', clr='green')
+
+# %%
+# deleting SCADA Voltage data from global dataframe
+printWithTs('deleting SCADA Voltage data...', clr='magenta')
+inp_ts_data_store.deleteTsData()
+printWithTs('done deleting SCADA Voltage data...', clr='green')
+
+# %%
+printWithTs(
+    'started loading REMC FCA Forecast Vs Actual Prev data store...', clr='magenta')
+# initialize REMC FCA forecast Vs actual Prev timeseries datastore
+loadRemcDataStore(FCA_FORECAST_VS_ACTUAL_PREV_STORE_NAME)
+printWithTs(
+    'REMC FCA Forecast Vs Actual Prev data store loading complete...', clr='green')
+
+# %%
+printWithTs('started REMC graph data report generation...', clr='magenta')
+## graph data report generation
+graphDataConfigSheet = 'remc_graph_data'
+graphDataOutputSheet = 'remc_graph_data'
+populateRemcGraphDataSectionData(
     configFilePath, graphDataConfigSheet, templateFilePath, graphDataOutputSheet)
-printWithTs('Graph data report section data dump complete...', clr='green')
+printWithTs('REMC Graph data report section data dump complete...', clr='green')
 
 # %%
 # pasting data from date file to template file
