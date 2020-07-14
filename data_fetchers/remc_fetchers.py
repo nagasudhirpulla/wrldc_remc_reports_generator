@@ -12,6 +12,9 @@ def fetchFcaForeVsActDf():
     fcaForeVsActDf = pd.read_csv(r'input_data\fca\FC_VS_AC.csv')
     return fcaForeVsActDf
 
+def fetchFcaForeVsActPrevDf():
+    fcaForeVsActPrevDf = pd.read_csv(r'input_data\fca\FC_VS_AC_PREV.csv')
+    return fcaForeVsActPrevDf
 
 def fetchIftDayAheadDf():
     iftDayAheadDf = pd.read_csv(r'input_data\ift\DAY_AHED.csv')

@@ -1,10 +1,11 @@
-from data_fetchers.remc_fetchers import fetchFcaDayAheadDf, fetchFcaForeVsActDf, fetchIftDayAheadDf, fetchIftForeVsActDf, fetchAleaDayAheadDf, fetchAleaForeVsActDf, fetchEnerDayAheadDf, fetchEnerForeVsActDf, fetchResDayAheadDf, fetchResForeVsActDf
+from data_fetchers.remc_fetchers import fetchFcaDayAheadDf, fetchFcaForeVsActDf, fetchFcaForeVsActPrevDf, fetchIftDayAheadDf, fetchIftForeVsActDf, fetchAleaDayAheadDf, fetchAleaForeVsActDf, fetchEnerDayAheadDf, fetchEnerForeVsActDf, fetchResDayAheadDf, fetchResForeVsActDf
 import pandas as pd
 from operator import add
 
 # constants for data store names
 FCA_DAY_AHEAD_STORE_NAME = 'fcaDayAheadStore'
 FCA_FORECAST_VS_ACTUAL_STORE_NAME = 'fcaForecastVsActualStore'
+FCA_FORECAST_VS_ACTUAL_PREV_STORE_NAME = 'fcaForecastVsActualPrevStore'
 IFT_DAY_AHEAD_STORE_NAME = 'iftDayAheadStore'
 IFT_FORECAST_VS_ACTUAL_STORE_NAME = 'iftForecastVsActualStore'
 ALEA_DAY_AHEAD_STORE_NAME = 'aleaDayAheadStore'
@@ -18,6 +19,7 @@ RES_FORECAST_VS_ACTUAL_STORE_NAME = 'resForecastVsActualStore'
 def loadRemcDataStore(storeName):
     global g_fcaDayAheadDf
     global g_fcaForecastVsActual
+    global g_fcaForecastVsActualPrev
     global g_iftDayAheadDf
     global g_iftForecastVsActual
     global g_aleaDayAheadDf
@@ -31,6 +33,8 @@ def loadRemcDataStore(storeName):
         g_fcaDayAheadDf = fetchFcaDayAheadDf()
     elif storeName == FCA_FORECAST_VS_ACTUAL_STORE_NAME:
         g_fcaForecastVsActual = fetchFcaForeVsActDf()
+    elif storeName == FCA_FORECAST_VS_ACTUAL_PREV_STORE_NAME:
+        g_fcaForecastVsActualPrev = fetchFcaForeVsActPrevDf()
     elif storeName == IFT_DAY_AHEAD_STORE_NAME:
         g_iftDayAheadDf = fetchIftDayAheadDf()
     elif storeName == IFT_FORECAST_VS_ACTUAL_STORE_NAME:
@@ -65,6 +69,8 @@ def deleteRemcDataStore(storeName):
         g_fcaDayAheadDf = pd.DataFrame()
     elif storeName == FCA_FORECAST_VS_ACTUAL_STORE_NAME:
         g_fcaForecastVsActual = pd.DataFrame()
+    elif storeName == FCA_FORECAST_VS_ACTUAL_PREV_STORE_NAME:
+        g_fcaForecastVsActualPrev = pd.DataFrame()
     elif storeName == IFT_DAY_AHEAD_STORE_NAME:
         g_iftDayAheadDf = pd.DataFrame()
     elif storeName == IFT_FORECAST_VS_ACTUAL_STORE_NAME:
@@ -100,6 +106,8 @@ def getRemcPntData(storeName, pnt):
         tsDf = g_fcaDayAheadDf
     elif storeName == FCA_FORECAST_VS_ACTUAL_STORE_NAME:
         tsDf = g_fcaForecastVsActual
+    elif storeName == FCA_FORECAST_VS_ACTUAL_PREV_STORE_NAME:
+        tsDf = g_fcaForecastVsActualPrev
     elif storeName == IFT_DAY_AHEAD_STORE_NAME:
         tsDf = g_iftDayAheadDf
     elif storeName == IFT_FORECAST_VS_ACTUAL_STORE_NAME:
