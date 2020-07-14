@@ -1,15 +1,23 @@
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 # https://www.programiz.com/python-programming/global-keyword
 from data_fetchers.inp_ts_data_df_fetch import fetchTsInpData, fetchPrevTsInpData
+from data_fetchers.volt_df_fetch import fetchVoltDf
 from operator import add
 import re
 import pandas as pd
 
 
-def initData():
+def loadGenTsData():
     global tsDataDf
     tsDataDf = fetchTsInpData()
 
+def loadVoltTsData():
+    global tsDataDf
+    tsDataDf = fetchVoltDf()
+
+def deleteTsData():
+    global tsDataDf
+    tsDataDf = pd.DataFrame()
 
 def initPrevData():
     global tsPrevDataDf

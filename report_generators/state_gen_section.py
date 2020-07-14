@@ -4,6 +4,7 @@ name,installed_capacity,max_avc,day_max_actual,day_max_actual_time,day_min_actua
 '''
 import pandas as pd
 from data_fetchers.inp_ts_data_store import getPntData
+from data_fetchers.remc_data_store import getRemcPntData, FCA_FORECAST_VS_ACTUAL_STORE_NAME
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
 
@@ -61,7 +62,8 @@ def getStateGenSectionDataDf(configFilePath, configSheetName):
         if ((avcPnt == '') or pd.isnull(avcPnt)):
             maxAvc = None
         else:
-            maxAvc = getPntData(avcPnt).max()
+            maxAvc = getRemcPntData(
+                FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()
         dayMaxActual = getPntData(actPnt).max()
         dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]
 
