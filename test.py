@@ -292,16 +292,17 @@ printWithTs('started loading SCADA prev day data store...', clr='magenta')
 inp_ts_data_store.initPrevData()
 # x = inp_ts_data_store.tsDataDf
 printWithTs('prev day data store loading complete...', clr='green')
+'''
 
 # %%
 printWithTs('started SCADA graph data report generation...', clr='magenta')
 ## graph data report generation
-graphDataConfigSheet = 'graph_data'
-graphDataOutputSheet = 'graph_data'
+graphDataConfigSheet = 'scada_graph_data'
+graphDataOutputSheet = 'scada_graph_data'
 populateGraphDataSectionData(
     configFilePath, graphDataConfigSheet, templateFilePath, graphDataOutputSheet)
 printWithTs('Graph data report section data dump complete...', clr='green')
-'''
+
 # %%
 # pasting data from date file to template file
 pasteDataToTemplateFile(outputFilePath, templateFilePath)

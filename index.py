@@ -32,11 +32,20 @@ printWithTs('imports complete...', clr='green')
 
 
 # %%
-printWithTs('loading SCADA data...', clr='magenta')
+printWithTs('loading SCADA Total ISTS Gen data...', clr='magenta')
 # initialize timeseries datastore
-inp_ts_data_store.initData()
+inp_ts_data_store.loadGenTsData()
 # x = inp_ts_data_store.tsDataDf
-printWithTs('data store loading complete...', clr='green')
+printWithTs('done loading SCADA Total ISTS Gen data store...', clr='green')
+
+# %%
+printWithTs(
+    'started loading REMC FCA Forecast Vs Actual data store...', clr='magenta')
+# initialize REMC FCA forecast Vs actual timeseries datastore
+loadRemcDataStore(FCA_FORECAST_VS_ACTUAL_STORE_NAME)
+# x = inp_ts_data_store.tsDataDf
+printWithTs(
+    'REMC FCA Forecast Vs Actual data store loading complete...', clr='green')
 
 # %%
 # file paths init
@@ -91,6 +100,18 @@ populateStateGenSectionData(
 printWithTs('State generation report section data dump complete...', clr='green')
 
 # %%
+# deleting SCADA Total ISTS Gen data from global dataframe
+printWithTs('deleting SCADA Total ISTS Gen data...', clr='magenta')
+inp_ts_data_store.deleteTsData()
+printWithTs('done deleting SCADA Total ISTS Gen data...', clr='green')
+
+# %%
+# loading SCADA voltage data to global dataframe
+printWithTs('loading SCADA voltage data...', clr='magenta')
+inp_ts_data_store.loadVoltTsData()
+printWithTs('done loading SCADA voltage data...', clr='green')
+
+# %%
 printWithTs('started voltage profile report generation...', clr='magenta')
 # voltage profile report generation
 voltSummConfigSheet = 'volt_profile'
@@ -98,15 +119,6 @@ voltSummOutputSheet = 'Daily REMC Report_Part2'
 populateVoltProfSectionData(
     configFilePath, voltSummConfigSheet, outputFilePath, voltSummOutputSheet, truncateSheet=True)
 printWithTs('Voltage Profile report section data dump complete...', clr='green')
-
-# %%
-printWithTs(
-    'started loading REMC FCA Forecast Vs Actual data store...', clr='magenta')
-# initialize REMC FCA forecast Vs actual timeseries datastore
-loadRemcDataStore(FCA_FORECAST_VS_ACTUAL_STORE_NAME)
-# x = inp_ts_data_store.tsDataDf
-printWithTs(
-    'REMC FCA Forecast Vs Actual data store loading complete...', clr='green')
 
 # %%
 printWithTs('started REMC regional R0 error summary generation...', clr='magenta')
@@ -280,16 +292,17 @@ printWithTs('started loading SCADA prev day data store...', clr='magenta')
 inp_ts_data_store.initPrevData()
 # x = inp_ts_data_store.tsDataDf
 printWithTs('prev day data store loading complete...', clr='green')
+'''
 
 # %%
 printWithTs('started SCADA graph data report generation...', clr='magenta')
 ## graph data report generation
-graphDataConfigSheet = 'graph_data'
-graphDataOutputSheet = 'graph_data'
+graphDataConfigSheet = 'scada_graph_data'
+graphDataOutputSheet = 'scada_graph_data'
 populateGraphDataSectionData(
     configFilePath, graphDataConfigSheet, templateFilePath, graphDataOutputSheet)
 printWithTs('Graph data report section data dump complete...', clr='green')
-'''
+
 # %%
 # pasting data from date file to template file
 pasteDataToTemplateFile(outputFilePath, templateFilePath)
