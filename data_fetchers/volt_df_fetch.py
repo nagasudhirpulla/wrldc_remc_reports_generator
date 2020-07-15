@@ -1,9 +1,21 @@
 import pandas as pd
+import datetime as dt
+import os
 
 def fetchVoltDf():
-    voltDf = pd.read_excel(r'input_data\voltages.xlsx', skiprows=9)
+    fPath = r'input_data\volt\volt.xlsx'
+    if not(os.path.exists(fPath)):
+        yestDate = dt.datetime.now() - dt.timedelta(days=1)
+        yestDateStr = dt.datetime.strftime(yestDate, '%Y%-m%-d')
+        fPath = r'input_data\volt\{0}.xlsx'.format(yestDateStr)
+    voltDf = pd.read_excel(fPath, skiprows=9)
     return voltDf
 
 def fetchPrevVoltDf():
-    voltDf = pd.read_excel(r'input_data\voltages_prev.xlsx', skiprows=9)
+    fPath = r'input_data\volt\volt_prev.xlsx'
+    if not(os.path.exists(fPath)):
+        yestDate = dt.datetime.now() - dt.timedelta(days=2)
+        yestDateStr = dt.datetime.strftime(yestDate, '%Y%-m%-d')
+        fPath = r'input_data\volt\{0}.xlsx'.format(yestDateStr)
+    voltDf = pd.read_excel(fPath, skiprows=9)
     return voltDf

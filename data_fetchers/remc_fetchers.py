@@ -1,64 +1,102 @@
 import pandas as pd
+import datetime as dt
+import os
 
-
+def getDateStr(numDays):
+    reqDate = dt.datetime.now() + dt.timedelta(days=numDays)
+    return dt.datetime.strftime(reqDate, '%Y-%m-%d')
+        
 def fetchFcaDayAheadDf():
-    fcaDayAheadDf = pd.read_csv(r'input_data\fca\DAY_AHED.csv')
+    fPath = r'input_data\fca\DAY_AHED.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\fca\DAY_AHED_{0}.xlsx'.format(getDateStr(-1))
+    fcaDayAheadDf = pd.read_csv(fPath)
     fcaDayAheadDf.columns = [x.strip()
                              for x in list(fcaDayAheadDf.columns.values)]
     return fcaDayAheadDf
 
 
 def fetchFcaForeVsActDf():
-    fcaForeVsActDf = pd.read_csv(r'input_data\fca\FC_VS_AC.csv')
+    fPath = r'input_data\fca\FC_VS_AC.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\fca\FC_VS_AC_{0}.xlsx'.format(getDateStr(-1))
+    fcaForeVsActDf = pd.read_csv(fPath)
     return fcaForeVsActDf
 
 def fetchFcaForeVsActPrevDf():
-    fcaForeVsActPrevDf = pd.read_csv(r'input_data\fca\FC_VS_AC_PREV.csv')
+    fPath = r'input_data\fca\FC_VS_AC_PREV.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\fca\FC_VS_AC_{0}.xlsx'.format(getDateStr(-2))
+    fcaForeVsActPrevDf = pd.read_csv(fPath)
     return fcaForeVsActPrevDf
 
 def fetchIftDayAheadDf():
-    iftDayAheadDf = pd.read_csv(r'input_data\ift\DAY_AHED.csv')
+    fPath = r'input_data\ift\DAY_AHED.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\ift\DAY_AHED_{0}.xlsx'.format(getDateStr(-1))
+    iftDayAheadDf = pd.read_csv(fPath)
     iftDayAheadDf.columns = [x.strip()
                              for x in list(iftDayAheadDf.columns.values)]
     return iftDayAheadDf
 
 
 def fetchIftForeVsActDf():
+    fPath = r'input_data\ift\FC_VS_AC.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\ift\FC_VS_AC_{0}.xlsx'.format(getDateStr(-1))
     iftForeVsActDf = pd.read_csv(r'input_data\ift\FC_VS_AC.csv')
     return iftForeVsActDf
 
 
 def fetchResDayAheadDf():
-    resDayAheadDf = pd.read_csv(r'input_data\res\DAY_AHED.csv')
+    fPath = r'input_data\res\DAY_AHED.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\res\DAY_AHED_{0}.xlsx'.format(getDateStr(-1))
+    resDayAheadDf = pd.read_csv(fPath)
     resDayAheadDf.columns = [x.strip()
                              for x in list(resDayAheadDf.columns.values)]
     return resDayAheadDf
 
 
 def fetchResForeVsActDf():
+    fPath = r'input_data\res\FC_VS_AC.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\res\FC_VS_AC_{0}.xlsx'.format(getDateStr(-1))
     resForeVsActDf = pd.read_csv(r'input_data\res\FC_VS_AC.csv')
     return resForeVsActDf
 
 
 def fetchAleaDayAheadDf():
-    aleaDayAheadDf = pd.read_csv(r'input_data\aleasoft\DAY_AHED.csv')
+    fPath = r'input_data\aleasoft\DAY_AHED.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\aleasoft\DAY_AHED_{0}.xlsx'.format(getDateStr(-1))
+    aleaDayAheadDf = pd.read_csv(fPath)
     aleaDayAheadDf.columns = [x.strip()
                              for x in list(aleaDayAheadDf.columns.values)]
     return aleaDayAheadDf
 
 
 def fetchAleaForeVsActDf():
-    aleaForeVsActDf = pd.read_csv(r'input_data\aleasoft\FC_VS_AC.csv')
+    fPath = r'input_data\aleasoft\FC_VS_AC.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\aleasoft\FC_VS_AC_{0}.xlsx'.format(getDateStr(-1))
+    aleaForeVsActDf = pd.read_csv(fPath)
     return aleaForeVsActDf
 
 
 def fetchEnerDayAheadDf():
-    enerDayAheadDf = pd.read_csv(r'input_data\enercast\DAY_AHED.csv')
+    fPath = r'input_data\enercast\DAY_AHED.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\enercast\DAY_AHED_{0}.xlsx'.format(getDateStr(-1))
+    enerDayAheadDf = pd.read_csv(fPath)
     enerDayAheadDf.columns = [x.strip()
                              for x in list(enerDayAheadDf.columns.values)]
     return enerDayAheadDf
 
 
 def fetchEnerForeVsActDf():
-    enerForeVsActDf = pd.read_csv(r'input_data\enercast\FC_VS_AC.csv')
+    fPath = r'input_data\enercast\FC_VS_AC.csv'
+    if not(os.path.exists(fPath)):
+        fPath = r'input_data\enercast\FC_VS_AC_{0}.xlsx'.format(getDateStr(-1))
+    enerForeVsActDf = pd.read_csv(fPath)
     return enerForeVsActDf
