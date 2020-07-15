@@ -19,7 +19,6 @@ def calcErrPercWithRespectToAvc(actVals, forecastVals, avcVals):
     return errVals
 
 
-
 '''
 all the inputs are lists
 output will be a list of errors wrt Forecast
@@ -45,20 +44,21 @@ all the inputs are lists
 output will be number, i.e., RMSE %
 
 steps:
-errSquare = (actual-forecast)^2
+errSquare = ((actual-forecast)*100/avc)^2
 errMeanSquare = Summation(errSquare)/num_of_blks
 rootMeanSquareError = Sqrt(errMeanSquare)
 '''
 
 
-def calcRmsePerc(actVals, forecastVals):
+def calcRmsePerc(actVals, forecastVals, avcVals):
     if (len(actVals) != len(forecastVals)):
         return None
     rmse = 0
     for valIter in range(len(actVals)):
-        errSquare = (actVals[valIter] - forecastVals[valIter])**2
+        errSquare = (
+            (actVals[valIter] - forecastVals[valIter])/avcVals[valIter])**2
         rmse = rmse + errSquare
-    rmse = (rmse/len(actVals))**0.5
+    rmse = (rmse*100/len(actVals))**0.5
     return rmse
 
 
@@ -91,7 +91,6 @@ def calcNrmsePerc(actVals, forecastVals, avcVals):
     return nrmse
 
 
-
 '''
 all the inputs are lists
 output will be number, i.e., MAPE %
@@ -112,7 +111,6 @@ def calcMapePerc(actVals, forecastVals, avcVals):
 
     mape = mape*100/len(actVals)
     return mape
-
 
 
 '''

@@ -49,33 +49,37 @@ def getRemcIstsRmseSectionDataDf(configFilePath, configSheetName):
             aggIdentifier = confRow[aggColName]
             confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
                                             == aggIdentifier]
+            avcPnt = ','.join(confDfForAgg['avc_pnt'].tolist())
             actPnt = ','.join(confDfForAgg['actual_pnt'].tolist())
             r16Pnt = ','.join(confDfForAgg['r16_pnt'].tolist())
         else:
+            avcPnt = confRow['avc_pnt']
             actPnt = confRow['actual_pnt']
             r16Pnt = confRow['r16_pnt']
 
         iftRmse = getRmse(
-            IFT_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt)
+            IFT_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
         aleaRmse = getRmse(
-            ALEA_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt)
+            ALEA_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
         resRmse = getRmse(
-            RES_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt)
+            RES_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
         enerRmse = getRmse(
-            ENER_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt)
+            ENER_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
         fcaRmse = getRmse(
-            FCA_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt)
-        
+            FCA_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
+
         resValsList.append({"name": confRow['name'], "ift": iftRmse,
-                                "aleasoft": aleaRmse, "res": resRmse,
-                                "enercast": enerRmse, "fca": fcaRmse})
+                            "aleasoft": aleaRmse, "res": resRmse,
+                            "enercast": enerRmse, "fca": fcaRmse})
     return pd.DataFrame(resValsList)
 
 
-def getRmse(storename, forecastPnt, actPnt):
+def getRmse(storename, forecastPnt, actPnt, avcPnt):
     forecastVals = getRemcPntData(
         storename, forecastPnt).tolist()
     actVals = getRemcPntData(
         storename, actPnt).tolist()
-    rmsePerc = calcRmsePerc(actVals, forecastVals)
+    avcVals = getRemcPntData(
+        storename, avcPnt).tolist()
+    rmsePerc = calcRmsePerc(actVals, forecastVals, avcVals)
     return rmsePerc

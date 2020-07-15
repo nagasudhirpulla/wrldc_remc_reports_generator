@@ -57,24 +57,24 @@ def getRemcStateErrNumBlksSectionDataDf(configFilePath, configSheetName):
             actPnt = confRow['actual_pnt']
             r16Pnt = confRow['r16_pnt']
 
-        iftNumBlksMoreThan15 = getNumBlksWithErrGreaterThan15(
+        iftNumBlksLessThan15 = getNumBlksWithErrLessThan15(
             IFT_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
-        aleaNumBlksMoreThan15 = getNumBlksWithErrGreaterThan15(
+        aleaNumBlksLessThan15 = getNumBlksWithErrLessThan15(
             ALEA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
-        resNumBlksMoreThan15 = getNumBlksWithErrGreaterThan15(
+        resNumBlksLessThan15 = getNumBlksWithErrLessThan15(
             RES_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
-        enerNumBlksMoreThan15 = getNumBlksWithErrGreaterThan15(
+        enerNumBlksLessThan15 = getNumBlksWithErrLessThan15(
             ENER_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
-        fcaNumBlksMoreThan15 = getNumBlksWithErrGreaterThan15(
+        fcaNumBlksLessThan15 = getNumBlksWithErrLessThan15(
             FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
-        
-        resValsList.append({"name": confRow['name'], "ift": iftNumBlksMoreThan15,
-                                "aleasoft": aleaNumBlksMoreThan15, "res": resNumBlksMoreThan15,
-                                "enercast": enerNumBlksMoreThan15, "fca": fcaNumBlksMoreThan15})
+
+        resValsList.append({"name": confRow['name'], "ift": iftNumBlksLessThan15,
+                            "aleasoft": aleaNumBlksLessThan15, "res": resNumBlksLessThan15,
+                            "enercast": enerNumBlksLessThan15, "fca": fcaNumBlksLessThan15})
     return pd.DataFrame(resValsList)
 
 
-def getNumBlksWithErrGreaterThan15(storename, avcPnt, forecastPnt, actPnt):
+def getNumBlksWithErrLessThan15(storename, avcPnt, forecastPnt, actPnt):
     avcVals = getRemcPntData(
         storename, avcPnt).tolist()
     forecastVals = getRemcPntData(
@@ -82,5 +82,5 @@ def getNumBlksWithErrGreaterThan15(storename, avcPnt, forecastPnt, actPnt):
     actVals = getRemcPntData(
         storename, actPnt).tolist()
     errPercVals = calcErrPercWithRespectToAvc(actVals, forecastVals, avcVals)
-    numBlks15 = len([x for x in errPercVals if abs(x) >= 15])
+    numBlks15 = len([x for x in errPercVals if abs(x) <= 15])
     return numBlks15
