@@ -44,21 +44,20 @@ all the inputs are lists
 output will be number, i.e., RMSE %
 
 steps:
-errSquare = ((actual-forecast)*100/avc)^2
+errSquare = (actual-forecast)^2
 errMeanSquare = Summation(errSquare)/num_of_blks
 rootMeanSquareError = Sqrt(errMeanSquare)
 '''
 
 
-def calcRmsePerc(actVals, forecastVals, avcVals):
+def calcRmsePerc(actVals, forecastVals):
     if (len(actVals) != len(forecastVals)):
         return None
     rmse = 0
     for valIter in range(len(actVals)):
-        errSquare = (
-            (actVals[valIter] - forecastVals[valIter])/avcVals[valIter])**2
+        errSquare = ((actVals[valIter] - forecastVals[valIter]))**2
         rmse = rmse + errSquare
-    rmse = (rmse*100/len(actVals))**0.5
+    rmse = (rmse/len(actVals))**0.5
     return rmse
 
 

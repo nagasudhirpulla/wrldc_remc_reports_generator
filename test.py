@@ -11,8 +11,8 @@ from report_generators.remc_ists_err_section import populateRemcIstsErrSummSecti
 from report_generators.remc_state_err_section import populateRemcStateErrSummSectionData
 from report_generators.remc_ists_err_num_blks_section import populateRemcIstsErrNumBlksSectionData
 from report_generators.remc_state_err_num_blks_section import populateRemcStateErrNumBlksSectionData
-from report_generators.remc_ists_rmse_section import populateRemcIstsRmseSectionData
-from report_generators.remc_state_rmse_section import populateRemcStateRmseSectionData
+from report_generators.remc_ists_nrmse_section import populateRemcIstsNrmseSectionData
+from report_generators.remc_state_nrmse_section import populateRemcStateNrmseSectionData
 from report_generators.remc_reg_da_section import populateRemcRegDaSummSectionData
 from report_generators.remc_ists_da_section import populateRemcIstsDaSummSectionData
 from report_generators.remc_state_da_section import populateRemcStateDaSummSectionData
@@ -209,7 +209,7 @@ printWithTs(
 # REMC ISTS RMSE
 istsFspRmseConfigSheet = 'ists_fsp_rmse'
 istsFspRmseOutputSheet = 'Daily REMC Report_Part3'
-populateRemcIstsRmseSectionData(
+populateRemcIstsNrmseSectionData(
     configFilePath, istsFspRmseConfigSheet, outputFilePath, istsFspRmseOutputSheet, truncateSheet=False)
 printWithTs('REMC ISTS RMSE data dump complete...', clr='green')
 
@@ -219,7 +219,7 @@ printWithTs(
 # REMC State RMSE
 stateFspRmseConfigSheet = 'state_fsp_rmse'
 stateFspRmseOutputSheet = 'Daily REMC Report_Part3'
-populateRemcStateRmseSectionData(
+populateRemcStateNrmseSectionData(
     configFilePath, stateFspRmseConfigSheet, outputFilePath, stateFspRmseOutputSheet, truncateSheet=False)
 printWithTs('REMC State RMSE data dump complete...', clr='green')
 

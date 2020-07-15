@@ -1,28 +1,28 @@
 '''
-create REMC Ists RMSE Section data in the column sequence
+create REMC State NRMSE Section data in the column sequence
 name,IFT,ALEASOFT,RES,ENERCAST,FCA
 '''
 import pandas as pd
 from data_fetchers.remc_data_store import getRemcPntData, IFT_FORECAST_VS_ACTUAL_STORE_NAME, ALEA_FORECAST_VS_ACTUAL_STORE_NAME, RES_FORECAST_VS_ACTUAL_STORE_NAME, ENER_FORECAST_VS_ACTUAL_STORE_NAME, FCA_FORECAST_VS_ACTUAL_STORE_NAME
-from utils.remcFormulas import calcRmsePerc
+from utils.remcFormulas import calcNrmsePerc
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
 
 
-def populateRemcIstsRmseSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
-    sectionDataDf = getRemcIstsRmseSectionDataDf(
+def populateRemcStateNrmseSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
+    sectionDataDf = getRemcStateNrmseSectionDataDf(
         configFilePath, configSheetName)
     # dump data to excel
     append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName,
                        startrow=None, truncate_sheet=truncateSheet, index=False, header=False)
 
 
-def getRemcIstsRmseSectionDataDf(configFilePath, configSheetName):
+def getRemcStateNrmseSectionDataDf(configFilePath, configSheetName):
     # get conf dataframe
     confDf = pd.read_excel(configFilePath, sheet_name=configSheetName)
     # confDf columns should be
-    # name,r16_pnt,actual_pnt,type,pooling_station
-    for stripCol in 'name,r16_pnt,actual_pnt,type,pooling_station'.split(','):
+    # name,r16_pnt,actual_pnt,type,state
+    for stripCol in 'name,r16_pnt,actual_pnt,type,state'.split(','):
         confDf[stripCol] = confDf[stripCol].str.strip()
 
     normalPntsConfDf = confDf[(confDf['type'] == 'normal') | (
@@ -34,7 +34,7 @@ def getRemcIstsRmseSectionDataDf(configFilePath, configSheetName):
     for rowIter in range(confDf.shape[0]):
         confRow = confDf.iloc[rowIter]
         printWithTs(
-            'REMC ISTS RMSE report processing row number {0}'.format(rowIter+2))
+            'REMC State RMSE report processing row number {0}'.format(rowIter+2))
 
         # get the type of row, itcan be dummy / normal / agg_pool / agg_gen_type
         rowType = confRow['type']
@@ -81,5 +81,5 @@ def getRmse(storename, forecastPnt, actPnt, avcPnt):
         storename, actPnt).tolist()
     avcVals = getRemcPntData(
         storename, avcPnt).tolist()
-    rmsePerc = calcRmsePerc(actVals, forecastVals, avcVals)
+    rmsePerc = calcNrmsePerc(actVals, forecastVals, avcVals)
     return rmsePerc
