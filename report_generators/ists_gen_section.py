@@ -35,7 +35,7 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
         confRow = confDf.iloc[rowIter]
         printWithTs('ists gen processing row number {0}'.format(rowIter+2))
 
-        timeValSeries = getPntData('HRS')
+        timeValSeries = getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, 'Time Stamp')
 
         # get the type of row, itcan be dummy / normal / agg_pool / agg_gen_type
         rowType = confRow['type']

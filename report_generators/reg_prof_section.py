@@ -45,7 +45,8 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
                                 "act_mu": None, "dev_mu": None, "cuf": None})
             continue
 
-        timeValSeries = getPntData('HRS')
+        timeValSeries = getRemcPntData(
+            FCA_FORECAST_VS_ACTUAL_STORE_NAME, 'Time Stamp')
         actPnt = confRow['actual_point']
         avcPnt = confRow['avc_point']
         if ((avcPnt == '') or pd.isnull(avcPnt)):
