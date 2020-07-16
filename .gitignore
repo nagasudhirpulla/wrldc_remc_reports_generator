@@ -11,7 +11,7 @@
 output/*.xlsx
 dummy_data/*.xlsx
 build/*
-dist/*
+remc_report_dist/*
 *.spec
 
 # excel temp files ignore

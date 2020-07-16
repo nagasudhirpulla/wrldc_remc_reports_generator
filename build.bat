@@ -1,1 +1,1 @@
-pyinstaller index.py
+pyinstaller index.py --distpath remc_report_dist
