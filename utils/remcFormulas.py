@@ -13,8 +13,11 @@ def calcErrPercWithRespectToAvc(actVals, forecastVals, avcVals):
         return None
     errVals = []
     for valIter in range(len(actVals)):
-        errVal = (actVals[valIter] - forecastVals[valIter]) * \
-            100/avcVals[valIter]
+        if avcVals[valIter] != 0:
+            errVal = (actVals[valIter] - forecastVals[valIter]) * \
+                100/avcVals[valIter]
+        else:
+            errVal = 0
         errVals.append(errVal)
     return errVals
 
@@ -24,7 +27,7 @@ all the inputs are lists
 output will be a list of errors wrt Forecast
 
 Steps:
-errWrtForecast = (actual-forecast)*100/avc
+errWrtForecast = (actual-forecast)*100/forecast
 '''
 
 
@@ -33,8 +36,11 @@ def calcErrPercWithRespectToForecast(actVals, forecastVals, avcVals):
         return None
     errVals = []
     for valIter in range(len(actVals)):
-        errVal = (actVals[valIter] - forecastVals[valIter]) * \
-            100/forecastVals[valIter]
+        if forecastVals[valIter] != 0:
+            errVal = (actVals[valIter] - forecastVals[valIter]) * \
+                100/forecastVals[valIter]
+        else:
+            errVal = 0
         errVals.append(errVal)
     return errVals
 
@@ -105,8 +111,9 @@ def calcMapePerc(actVals, forecastVals, avcVals):
         return None
     mape = 0
     for valIter in range(len(actVals)):
-        mape = mape + abs(actVals[valIter] -
-                          forecastVals[valIter])/avcVals[valIter]
+        if avcVals[valIter] != 0:
+            mape = mape + abs(actVals[valIter] -
+                            forecastVals[valIter])/avcVals[valIter]
 
     mape = mape*100/len(actVals)
     return mape
