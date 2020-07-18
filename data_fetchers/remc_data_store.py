@@ -56,6 +56,7 @@ def loadRemcDataStore(storeName):
 def deleteRemcDataStore(storeName):
     global g_fcaDayAheadDf
     global g_fcaForecastVsActual
+    global g_fcaForecastVsActualPrev
     global g_iftDayAheadDf
     global g_iftForecastVsActual
     global g_aleaDayAheadDf
@@ -140,4 +141,7 @@ def getRemcPntData(storeName, pnt):
             resVals = list(map(add, resVals, tsDf[pnt]))
         return pd.Series(resVals)
     else:
-        return tsDf[pnt]
+        if pnt in tsDf.columns:
+            return tsDf[pnt]
+        else:
+            return pd.Series()
