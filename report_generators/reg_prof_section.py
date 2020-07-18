@@ -70,7 +70,7 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
             FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).mean()*0.024
         devMu = actMu - schMu
         installedCapacity = confRow['installed_capacity']
-        cufPerc = (actMu*2.4)/installedCapacity
+        cufPerc = (actMu*100000)/(24*installedCapacity)
 
         resValsList.append({"name": confRow['name'],
                             "installed_capacity": installedCapacity,

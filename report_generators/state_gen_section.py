@@ -74,7 +74,7 @@ def getStateGenSectionDataDf(configFilePath, configSheetName):
         actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
         installedCapacity = confRow['installed_capacity']
-        cufPerc = (actMu*2.4)/installedCapacity
+        cufPerc = (actMu*100000)/(24*installedCapacity)
 
         resValsList.append({"name": confRow['name'],
                             "installed_capacity": installedCapacity,
