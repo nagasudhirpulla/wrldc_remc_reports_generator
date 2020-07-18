@@ -131,15 +131,18 @@ def getRemcPntData(storeName, pnt):
     if (pd.isnull(pnt) or (pnt == '')):
         return None
     if "," in pnt:
-        pnts = pnt.split(',')
-        if len(pnts) == 0:
-            return None
-        resVals = tsDf[pnts[0]]
-        for pnt in pnts[1:]:
-            if (pd.isnull(pnt) or (pnt == '')):
-                continue
-            resVals = list(map(add, resVals, tsDf[pnt]))
-        return pd.Series(resVals)
+        try:
+            pnts = pnt.split(',')
+            if len(pnts) == 0:
+                return None
+            resVals = tsDf[pnts[0]]
+            for pnt in pnts[1:]:
+                if (pd.isnull(pnt) or (pnt == '')):
+                    continue
+                resVals = list(map(add, resVals, tsDf[pnt]))
+            return pd.Series(resVals)
+        except:
+            return pd.Series()
     else:
         if pnt in tsDf.columns:
             return tsDf[pnt]
