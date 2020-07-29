@@ -35,7 +35,7 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
         confRow = confDf.iloc[rowIter]
         printWithTs('ists gen processing row number {0}'.format(rowIter+2))
 
-        timeValSeries = getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, 'Time Stamp')
+        timeValSeries = getPntData('HRS')
 
         # get the type of row, itcan be dummy / normal / agg_pool / agg_gen_type
         rowType = confRow['type']
@@ -66,14 +66,14 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
         else:
             maxAvc = getRemcPntData(
                 FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()
-        dayMaxActual = getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).max()
-        dayMaxActualTime = timeValSeries.iloc[getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).idxmax()]
+        dayMaxActual = getPntData(actPnt).max()
+        dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]
 
-        dayMinActual = getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).min()
-        dayMinActualTime = timeValSeries.iloc[getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).idxmin()]
+        dayMinActual = getPntData(actPnt).min()
+        dayMinActualTime = timeValSeries.iloc[getPntData(actPnt).idxmin()]
 
         schMu = getPntData(schPnt).mean()*0.024
-        actMu = getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).mean()*0.024
+        actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
         installedCapacity = confRow['installed_capacity']
         cufPerc = (actMu*100000)/(24*installedCapacity)

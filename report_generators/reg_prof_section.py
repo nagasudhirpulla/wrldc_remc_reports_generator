@@ -45,8 +45,7 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
                                 "act_mu": None, "dev_mu": None, "cuf": None})
             continue
 
-        timeValSeries = getRemcPntData(
-            FCA_FORECAST_VS_ACTUAL_STORE_NAME, 'Time Stamp')
+        timeValSeries = getPntData('HRS')
         actPnt = confRow['actual_point']
         avcPnt = confRow['avc_point']
         if ((avcPnt == '') or pd.isnull(avcPnt)):
@@ -55,19 +54,14 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
             maxAvc = getRemcPntData(
                 FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()
 
-        dayMaxActual = getRemcPntData(
-            FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).max()
-        dayMaxActualTime = timeValSeries.iloc[getRemcPntData(
-            FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).idxmax()]
+        dayMaxActual = getPntData(actPnt).max()
+        dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]
 
-        dayMinActual = getRemcPntData(
-            FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).min()
-        dayMinActualTime = timeValSeries.iloc[getRemcPntData(
-            FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).idxmin()]
+        dayMinActual = getPntData(actPnt).min()
+        dayMinActualTime = timeValSeries.iloc[getPntData(actPnt).idxmin()]
 
         schMu = getPntData(confRow['sch_point']).mean()*0.024
-        actMu = getRemcPntData(
-            FCA_FORECAST_VS_ACTUAL_STORE_NAME, actPnt).mean()*0.024
+        actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
         installedCapacity = confRow['installed_capacity']
         cufPerc = (actMu*100000)/(24*installedCapacity)
