@@ -1,7 +1,7 @@
 .vscode/*
-!.vscode/settings.json
+# !.vscode/settings.json
 !.vscode/tasks.json
-!.vscode/launch.json
+# !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
 
@@ -12,6 +12,7 @@ output/*.xlsx
 dummy_data/*.xlsx
 build/*
 remc_report_dist/*
+project_env/
 *.spec
 
 # excel temp files ignore
