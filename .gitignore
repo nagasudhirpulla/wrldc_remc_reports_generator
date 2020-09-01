@@ -10,6 +10,8 @@
 
 output/*.xlsx
 dummy_data/*.xlsx
+input_data/**/*.csv
+input_data/**/*.xlsx
 build/*
 remc_report_dist/*
 project_env/
