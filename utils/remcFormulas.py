@@ -57,6 +57,8 @@ rootMeanSquareError = Sqrt(errMeanSquare)
 
 
 def calcRmsePerc(actVals, forecastVals):
+    if len(actVals) == 0:
+        return None
     if (len(actVals) != len(forecastVals)):
         return None
     rmse = 0
@@ -81,6 +83,8 @@ nrmsePerc = rootMeanSquareError*100/avcMean
 
 
 def calcNrmsePerc(actVals, forecastVals, avcVals):
+    if len(actVals) == 0:
+        return None
     if (len(actVals) != len(forecastVals)) and (len(actVals) != len(avcVals)):
         return None
     nrmse = 0
@@ -107,6 +111,8 @@ mapePerc = Summation(x)*100/num_of_blks
 
 
 def calcMapePerc(actVals, forecastVals, avcVals):
+    if len(actVals) == 0:
+        return None
     if (len(actVals) != len(forecastVals)) and (len(actVals) != len(avcVals)):
         return None
     mape = 0
@@ -131,6 +137,8 @@ nmae = mae/avcMean
 
 
 def calcNmae(actVals, forecastVals, avcVals):
+    if len(actVals) == 0:
+        return None
     if (len(actVals) != len(forecastVals)) and (len(actVals) != len(avcVals)):
         return None
     nmae = 0
