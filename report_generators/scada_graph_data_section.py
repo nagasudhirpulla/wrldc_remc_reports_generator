@@ -9,7 +9,8 @@ from utils.printUtils import printWithTs
 
 
 def populateScadaGraphDataSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName):
-    sectionDataDf = getScadaGraphDataSectionDataDf(configFilePath, configSheetName)
+    sectionDataDf = getScadaGraphDataSectionDataDf(
+        configFilePath, configSheetName)
     # dump data to excel
     append_df_to_excel(outputFilePath, sectionDataDf, sheet_name=outputSheetName,
                        startrow=0, truncate_sheet=True, index=False)
@@ -38,6 +39,11 @@ def getScadaGraphDataSectionDataDf(configFilePath, configSheetName):
             isPrev = True
 
         pntData = getPntData(pnt, isPrev=isPrev)
+
+        # replace with zeros if we do not have data in the store
+        if pntData.size == 0:
+            pntData = pd.Series([0 for x in range(96)])
+
         resValsObj[name] = pntData.values
 
     return pd.DataFrame(resValsObj)
