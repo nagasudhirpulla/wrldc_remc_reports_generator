@@ -36,6 +36,11 @@ def getRemcGraphDataSectionDataDf(configFilePath, configSheetName):
         store = confRow['store']
 
         pntData = getRemcPntData(store, pnt)
+
+        # replace with zeros if we do not have data in the store
+        if pntData.size == 0:
+            pntData = pd.Series([0 for x in range(96)])
+
         resValsObj[name] = pntData.values
 
     return pd.DataFrame(resValsObj)
