@@ -28,6 +28,7 @@ import datetime as dt
 import argparse
 from utils.printUtils import printWithTs
 from report_generators.paste_report_data import pasteDataToTemplateFile
+from report_generators.nldc_report_generator import generateNldcReport
 
 printWithTs('imports complete...', clr='green')
 
@@ -297,7 +298,7 @@ printWithTs('prev day data store loading complete...', clr='green')
 
 # %%
 printWithTs('started SCADA graph data report generation...', clr='magenta')
-## graph data report generation
+# graph data report generation
 scadaGraphDataConfigSheet = 'scada_graph_data'
 scadaGraphDataOutputSheet = 'scada_graph_data'
 populateScadaGraphDataSectionData(
@@ -320,7 +321,7 @@ printWithTs(
 
 # %%
 printWithTs('started REMC graph data report generation...', clr='magenta')
-## graph data report generation
+# graph data report generation
 graphDataConfigSheet = 'remc_graph_data'
 graphDataOutputSheet = 'remc_graph_data'
 populateRemcGraphDataSectionData(
@@ -332,3 +333,11 @@ printWithTs('REMC Graph data report section data dump complete...', clr='green')
 pasteDataToTemplateFile(outputFilePath, templateFilePath)
 printWithTs('Data pasting done from data file to template file...', clr='green')
 printWithTs('Report preparation done !', clr='green')
+
+# %%
+srcReportPath = 'output/report_template.xlsx'
+srcShNames = ["Daily REMC Report_Part1",
+              "Daily REMC Report_Part2", "Daily REMC Report_Part3"]
+outputCsvPath = 'output/nldc_remc_data.csv'
+generateNldcReport(srcReportPath, srcShNames, outputCsvPath)
+printWithTs('NLDC Report preparation done !', clr='green')

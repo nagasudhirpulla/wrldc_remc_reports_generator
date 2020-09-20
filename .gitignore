@@ -9,6 +9,7 @@
 .history/
 
 output/*.xlsx
+output/*.csv
 dummy_data/*.xlsx
 input_data/**/*.csv
 input_data/**/*.xlsx
