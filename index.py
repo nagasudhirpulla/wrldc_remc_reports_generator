@@ -338,6 +338,8 @@ printWithTs('Report preparation done !', clr='green')
 srcReportPath = 'output/report_template.xlsx'
 srcShNames = ["Daily REMC Report_Part1",
               "Daily REMC Report_Part2", "Daily REMC Report_Part3"]
-outputCsvPath = 'output/nldc_remc_data.csv'
+
+yestDateStr = dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=1), '%Y_%m_%d')
+outputCsvPath = 'output/nldc/nldc_remc_data_{0}.csv'.format(yestDateStr)
 generateNldcReport(srcReportPath, srcShNames, outputCsvPath)
 printWithTs('NLDC Report preparation done !', clr='green')
