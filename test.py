@@ -3,6 +3,7 @@
 import os
 from ftplib import FTP
 import pandas as pd
+import datetime as dt
 
 configFilePath = "config/remc_report_config.xlsx"
 configSheetName = 'app_config'
@@ -14,8 +15,10 @@ ftpHost = configDict['ftpHost']
 ftpUsername = configDict['ftpUsername']
 ftpPassword = configDict['ftpPassword']
 ftpFolderPath = configDict['ftpDumpFolder']
+yestDateStr = dt.datetime.strftime(
+    dt.datetime.now() - dt.timedelta(days=1), '%Y_%m_%d')
 
-srcFilePath = 'test.txt'
+srcFilePath = 'output/nldc/nldc_remc_data_{0}.csv'.format(yestDateStr)
 
 # create FTP connection
 ftpConn = FTP(host=ftpHost)
