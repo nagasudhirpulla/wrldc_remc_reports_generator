@@ -28,7 +28,7 @@ import datetime as dt
 import argparse
 from utils.printUtils import printWithTs
 from report_generators.paste_report_data import pasteDataToTemplateFile
-from report_generators.nldc_report_generator import generateNldcReport
+from report_generators.nldc_report_generator import generateNldcReport, transferNldcRepToFtpLocation
 
 printWithTs('imports complete...', clr='green')
 
@@ -339,7 +339,17 @@ srcReportPath = 'output/report_template.xlsx'
 srcShNames = ["Daily REMC Report_Part1",
               "Daily REMC Report_Part2", "Daily REMC Report_Part3"]
 
-yestDateStr = dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=1), '%Y_%m_%d')
+yestDateStr = dt.datetime.strftime(
+    dt.datetime.now() - dt.timedelta(days=1), '%Y_%m_%d')
 outputCsvPath = 'output/nldc/nldc_remc_data_{0}.csv'.format(yestDateStr)
 generateNldcReport(srcReportPath, srcShNames, outputCsvPath)
 printWithTs('NLDC Report preparation done !', clr='green')
+
+# %%
+appConfigSheet = 'app_config'
+isNldcFtpSuccess = transferNldcRepToFtpLocation(
+    configFilePath, appConfigSheet, outputCsvPath)
+if isNldcFtpSuccess:
+    printWithTs('NLDC CSV Ftp transfer done !', clr='green')
+else:
+    printWithTs('NLDC CSV FTP transfer not done...', clr='green')
