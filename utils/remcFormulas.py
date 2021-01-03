@@ -95,8 +95,11 @@ def calcNrmsePerc(actVals, forecastVals, avcVals):
         avcMean = avcMean + avcVals[valIter]
 
     avcMean = avcMean / len(actVals)
-    nrmse = (((nrmse/len(actVals))**0.5)*100/avcMean)
-
+    if not (avcMean == 0):
+        nrmse = (((nrmse/len(actVals))**0.5)*100/avcMean)
+    else:
+        # set nrmse as None since output would be inifinity
+        nrmse = None
     return nrmse
 
 
@@ -119,7 +122,10 @@ def calcMapePerc(actVals, forecastVals, avcVals):
     for valIter in range(len(actVals)):
         if avcVals[valIter] != 0:
             mape = mape + abs(actVals[valIter] -
-                            forecastVals[valIter])/avcVals[valIter]
+                              forecastVals[valIter])/avcVals[valIter]
+        else:
+            # return None since the output would be infinity
+            return None
 
     mape = mape*100/len(actVals)
     return mape
@@ -149,6 +155,9 @@ def calcNmae(actVals, forecastVals, avcVals):
         avcMean = avcMean + avcVals[valIter]
 
     avcMean = avcMean/len(actVals)
+    if avcMean == 0:
+        # return None since the output would be infinity
+        return None
     nmae = nmae/len(actVals)
     nmae = nmae / avcMean
     return nmae
