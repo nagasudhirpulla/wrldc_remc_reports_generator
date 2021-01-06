@@ -3,6 +3,7 @@
 from report_generators.reg_prof_section import populateRegProfSectionData
 from report_generators.ists_gen_section import populateIstsGenSectionData
 from report_generators.state_gen_section import populateStateGenSectionData
+from report_generators.max_info_section import populateMaxGenInfoSectionData
 from report_generators.volt_profile_section import populateVoltProfSectionData
 from report_generators.scada_graph_data_section import populateScadaGraphDataSectionData
 from report_generators.remc_reg_r0_err_section import populateRemcRegionalR0ErrSectionData
@@ -100,6 +101,15 @@ stateGenOutputSheet = 'Daily REMC Report_Part1'
 populateStateGenSectionData(
     configFilePath, stateGenConfigSheet, outputFilePath, stateGenOutputSheet)
 printWithTs('State generation report section data dump complete...', clr='green')
+
+# %%
+printWithTs('started max gen info report generation...', clr='magenta')
+# state generation report generation
+maxGenInfoConfigSheet = 'max_info'
+maxGenInfoOutputSheet = 'Daily REMC Report_Part1'
+populateMaxGenInfoSectionData(
+    configFilePath, maxGenInfoConfigSheet, outputFilePath, maxGenInfoOutputSheet)
+printWithTs('Max Gen Info report section data dump complete...', clr='green')
 
 # %%
 # deleting SCADA Total ISTS Gen data from global dataframe
