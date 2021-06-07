@@ -1,0 +1,2 @@
+*.json
+!config_dummy.json
