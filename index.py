@@ -29,7 +29,7 @@ import datetime as dt
 import argparse
 from utils.printUtils import printWithTs
 from report_generators.paste_report_data import pasteDataToTemplateFile
-from report_generators.nldc_report_generator import generateNldcReport, transferNldcRepToFtpLocation
+from report_generators.nldc_report_generator import generateNldcReport, transferNldcRepToSftpLocation
 
 printWithTs('imports complete...', clr='green')
 
@@ -53,6 +53,7 @@ printWithTs(
 # %%
 # file paths init
 configFilePath = "config/remc_report_config.xlsx"
+appConfigFilePath = 'config/config.json'
 outputFilePath = "output/report_output_data.xlsx"
 templateFilePath = 'output/report_template.xlsx'
 
@@ -64,6 +65,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '--config', help='filePath of config file', default=configFilePath)
 parser.add_argument(
+    '--app_config', help='filePath of app config json file', default=appConfigFilePath)
+parser.add_argument(
     '--output', help='filePath of config file', default=outputFilePath)
 parser.add_argument(
     '--template', help='filePath of template file', default=templateFilePath)
@@ -71,6 +74,7 @@ args = parser.parse_args()
 
 # read arguments
 configFilePath = args.config
+appConfigFilePath = args.app_config
 outputFilePath = args.output
 templateFilePath = args.template
 printWithTs('parsing input arguments done...', clr='green')
@@ -357,9 +361,9 @@ printWithTs('NLDC Report preparation done !', clr='green')
 
 # %%
 appConfigSheet = 'app_config'
-isNldcFtpSuccess = transferNldcRepToFtpLocation(
-    configFilePath, appConfigSheet, outputCsvPath)
+isNldcFtpSuccess = transferNldcRepToSftpLocation(
+    appConfigFilePath, outputCsvPath)
 if isNldcFtpSuccess:
-    printWithTs('NLDC CSV Ftp transfer done !', clr='green')
+    printWithTs('NLDC CSV transfer done !', clr='green')
 else:
-    printWithTs('NLDC CSV FTP transfer not done...', clr='green')
+    printWithTs('NLDC CSV transfer not done...', clr='green')
