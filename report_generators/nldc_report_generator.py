@@ -1,3 +1,4 @@
+from socket import timeout
 import xlwings as xw
 import csv
 from typing import List
@@ -100,9 +101,11 @@ def transferNldcRepToSftpLocation(configFilePath: str, srcFilePath: str) -> bool
         cnopts = pysftp.CnOpts()
         cnopts.hostkeys = None
         with pysftp.Connection(ftpHost, username=ftpUsername, password=ftpPassword, cnopts=cnopts) as sftp:
+            sftp.timeout = 180
             sftp.cwd(ftpFolderPath)
             # copy the file to remote ftp folder
             sftp.put(srcFilePath)
         return True
-    except:
+    except Exception as e:
+        print(e)
         return False
