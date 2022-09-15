@@ -29,6 +29,7 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
                        truncate_sheet=False, 
                        **to_excel_kwargs):
     """
+    updated function available at https://stackoverflow.com/questions/66531396/export-pandas-dataframe-to-xlsx-dealing-with-the-openpyxl-issue-on-python-3-9
     Append a DataFrame [df] to existing Excel file [filename]
     into [sheet_name] Sheet.
     If [filename] doesn't exist, then this function will create it.
@@ -62,7 +63,7 @@ def append_df_to_excel(filename, df, sheet_name='Sheet1', startrow=None,
     if 'engine' in to_excel_kwargs:
         to_excel_kwargs.pop('engine')
 
-    writer = pd.ExcelWriter(filename, engine='openpyxl') # pylint: disable=abstract-class-instantiated
+    writer = pd.ExcelWriter(filename, engine='openpyxl', mode='a', if_sheet_exists='overlay') # pylint: disable=abstract-class-instantiated
 
     # Python 2.x: define [FileNotFoundError] exception if it doesn't exist 
     try:
