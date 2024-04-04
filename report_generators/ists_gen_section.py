@@ -63,6 +63,8 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
 
         if ((avcPnt == '') or pd.isnull(avcPnt)):
             maxAvc = None
+        if (avcPnt.startswith("WREMC")):
+            maxAvc = getPntData(avcPnt).max()
         else:
             maxAvc = getRemcPntData(
                 FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()

@@ -119,15 +119,16 @@ def calcMapePerc(actVals, forecastVals, avcVals):
     if (len(actVals) != len(forecastVals)) and (len(actVals) != len(avcVals)):
         return None
     mape = 0
+    numValid = 0
     for valIter in range(len(actVals)):
         if avcVals[valIter] != 0:
+            numValid += 1
             mape = mape + abs(actVals[valIter] -
                               forecastVals[valIter])/avcVals[valIter]
-        else:
-            # return None since the output would be infinity
-            return None
-
-    mape = mape*100/len(actVals)
+    if numValid == 0:
+        return None
+    
+    mape = mape*100/numValid
     return mape
 
 

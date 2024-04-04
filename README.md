@@ -1,5 +1,7 @@
 # Steps to generate REMC report using the script
 
+currently uses python 3.8.8
+
 ### Open the folder of the script
 ### Collect the input data excel files
 * Paste the SCADA files in the volt, tot_gen, ists_gen folders
