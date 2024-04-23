@@ -63,11 +63,19 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
 
         if ((avcPnt == '') or pd.isnull(avcPnt)):
             maxAvc = None
-        if (avcPnt.startswith("WREMC")):
-            maxAvc = getPntData(avcPnt).max()
         else:
-            maxAvc = getRemcPntData(
-                FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()
+            # maxAvc = getRemcPntData(
+            #     FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()
+            avcVals = pd.Series()
+            for avcPntId in avcPnt.split(","):
+                if (avcPntId.startswith("WREMC")):
+                    pntAvcVals = getPntData(avcPntId)
+                else:
+                    pntAvcVals = getRemcPntData(
+                        FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPntId)
+                avcVals = avcVals.add(pntAvcVals, fill_value=0)
+            maxAvc = avcVals.max()
+
         dayMaxActual = getPntData(actPnt).max()
         dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]
 
