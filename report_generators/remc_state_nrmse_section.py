@@ -41,10 +41,10 @@ def getRemcStateNrmseSectionDataDf(configFilePath, configSheetName):
         if rowType == 'dummy':
             # since the row is dummy, just insert a None row into result
             resValsList.append({"name": confRow['name'], "ift": None,
-                                "aleasoft": None, "res": None,
-                                "enercast": None, "fca": None})
+                                "res": None, "enercast": None,
+                                "fca": None})
             continue
-        elif not(pd.isnull(rowType)) and rowType.startswith('agg_'):
+        elif not (pd.isnull(rowType)) and rowType.startswith('agg_'):
             aggColName = rowType[len('agg_'):]
             aggIdentifier = confRow[aggColName]
             confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
@@ -59,8 +59,6 @@ def getRemcStateNrmseSectionDataDf(configFilePath, configSheetName):
 
         iftRmse = getRmse(
             IFT_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
-        aleaRmse = getRmse(
-            ALEA_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
         resRmse = getRmse(
             RES_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
         enerRmse = getRmse(
@@ -69,8 +67,8 @@ def getRemcStateNrmseSectionDataDf(configFilePath, configSheetName):
             FCA_FORECAST_VS_ACTUAL_STORE_NAME, r16Pnt, actPnt, avcPnt)
 
         resValsList.append({"name": confRow['name'], "ift": iftRmse,
-                            "aleasoft": aleaRmse, "res": resRmse,
-                            "enercast": enerRmse, "fca": fcaRmse})
+                            "res": resRmse, "enercast": enerRmse,
+                            "fca": fcaRmse})
     return pd.DataFrame(resValsList)
 
 

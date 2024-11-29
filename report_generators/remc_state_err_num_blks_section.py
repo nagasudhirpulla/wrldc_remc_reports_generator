@@ -41,10 +41,9 @@ def getRemcStateErrNumBlksSectionDataDf(configFilePath, configSheetName):
         if rowType == 'dummy':
             # since the row is dummy, just insert a None row into result
             resValsList.append({"name": confRow['name'], "ift": None,
-                                "aleasoft": None, "res": None,
-                                "enercast": None, "fca": None})
+                                "res": None, "enercast": None, "fca": None})
             continue
-        elif not(pd.isnull(rowType)) and rowType.startswith('agg_'):
+        elif not (pd.isnull(rowType)) and rowType.startswith('agg_'):
             aggColName = rowType[len('agg_'):]
             aggIdentifier = confRow[aggColName]
             confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
@@ -59,8 +58,6 @@ def getRemcStateErrNumBlksSectionDataDf(configFilePath, configSheetName):
 
         iftNumBlksLessThan15 = getNumBlksWithErrLessThan15(
             IFT_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
-        aleaNumBlksLessThan15 = getNumBlksWithErrLessThan15(
-            ALEA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
         resNumBlksLessThan15 = getNumBlksWithErrLessThan15(
             RES_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
         enerNumBlksLessThan15 = getNumBlksWithErrLessThan15(
@@ -69,8 +66,8 @@ def getRemcStateErrNumBlksSectionDataDf(configFilePath, configSheetName):
             FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt, r16Pnt, actPnt)
 
         resValsList.append({"name": confRow['name'], "ift": iftNumBlksLessThan15,
-                            "aleasoft": aleaNumBlksLessThan15, "res": resNumBlksLessThan15,
-                            "enercast": enerNumBlksLessThan15, "fca": fcaNumBlksLessThan15})
+                            "res": resNumBlksLessThan15, "enercast": enerNumBlksLessThan15,
+                            "fca": fcaNumBlksLessThan15})
     return pd.DataFrame(resValsList)
 
 

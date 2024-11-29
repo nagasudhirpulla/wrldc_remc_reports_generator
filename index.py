@@ -181,12 +181,6 @@ printWithTs(
     'done loading REMC IFT Forecast Vs Actual data store...', clr='green')
 
 printWithTs(
-    'started loading REMC ALEASOFT Forecast Vs Actual data store...', clr='magenta')
-loadRemcDataStore(ALEA_FORECAST_VS_ACTUAL_STORE_NAME)
-printWithTs(
-    'done loading REMC ALEASOFT Forecast Vs Actual data store...', clr='green')
-
-printWithTs(
     'started loading REMC RES Forecast Vs Actual data store...', clr='magenta')
 loadRemcDataStore(RES_FORECAST_VS_ACTUAL_STORE_NAME)
 printWithTs(
@@ -244,12 +238,6 @@ printWithTs(
 deleteRemcDataStore(IFT_FORECAST_VS_ACTUAL_STORE_NAME)
 printWithTs(
     'done deleting REMC IFT Forecast Vs Actual data store...', clr='green')
-
-printWithTs(
-    'started deleting REMC ALEASOFT Forecast Vs Actual data store...', clr='magenta')
-deleteRemcDataStore(ALEA_FORECAST_VS_ACTUAL_STORE_NAME)
-printWithTs(
-    'done deleting REMC ALEASOFT Forecast Vs Actual data store...', clr='green')
 
 printWithTs(
     'started deleting REMC RES Forecast Vs Actual data store...', clr='magenta')
