@@ -1,5 +1,6 @@
 # %%
 # imports
+from report_generators.paste_scada_avail_data import pasteScadaAvailToTemplateFile
 from report_generators.reg_prof_section import populateRegProfSectionData
 from report_generators.ists_gen_section import populateIstsGenSectionData
 from report_generators.state_gen_section import populateStateGenSectionData
@@ -329,6 +330,14 @@ graphDataOutputSheet = 'remc_graph_data'
 populateRemcGraphDataSectionData(
     configFilePath, graphDataConfigSheet, templateFilePath, graphDataOutputSheet)
 printWithTs('REMC Graph data report section data dump complete...', clr='green')
+
+# %%
+# pasting SCADA data availability data to template
+scadaAvailabilityOutputSheet = "Daily REMC Report_Part2"
+reqDt = dt.datetime.now()-dt.timedelta(days=1)
+pasteScadaAvailToTemplateFile(
+    reqDt, templateFilePath, scadaAvailabilityOutputSheet)
+printWithTs('Data pasting completed for SCADA availability...', clr='green')
 
 # %%
 # pasting data from date file to template file
