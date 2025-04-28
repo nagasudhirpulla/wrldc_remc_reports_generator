@@ -1,11 +1,32 @@
 # https://stackoverflow.com/questions/13034496/using-global-variables-between-files
 # https://www.programiz.com/python-programming/global-keyword
+import enum
 from data_fetchers.inp_ts_data_df_fetch import fetchTsInpData, fetchPrevTsInpData
+from data_fetchers.point_ids_df_fetch import fetchPointIdsDf
 from data_fetchers.volt_df_fetch import fetchVoltDf
 from operator import add
 import re
 import pandas as pd
 
+def loadPointIdsData(configFilePath, pointsSheet):
+    global pointIdsDf
+    pointIdsDf = fetchPointIdsDf(configFilePath, pointsSheet)
+
+
+@enum.unique
+class PointIdTypes(str, enum.Enum):
+    installed_capacity = 'installed_capacity',
+    actual_point = 'actual_point',
+    sch_point = 'sch_point',
+    pooling_station = 'pooling_station',
+    gen_type1 = 'gen_type1',
+    entity_type = 'entity_type',
+    r0_pnt = 'r0_pnt',
+    r16_pnt = 'r16_pnt',
+    actual_pnt_sch = 'actual_pnt_sch',
+    cuf_pnt = 'cuf_pnt',
+    avc_point = 'avc_point',
+    forecast_point = 'forecast_point'
 
 def loadGenTsData():
     global tsDataDf
@@ -23,6 +44,9 @@ def initPrevData():
     global tsPrevDataDf
     tsPrevDataDf = fetchPrevTsInpData()
 
+def getEntityPointIds(entityName):
+    pointIdsDict = pointIdsDf.loc[entityName].to_dict()
+    return pointIdsDict
 
 def getPntData(pnt, isPrev=False):
     # returns a pandas series of point data

@@ -81,6 +81,11 @@ templateFilePath = args.template
 printWithTs('parsing input arguments done...', clr='green')
 
 # %%
+printWithTs('loading point Ids started...', clr='magenta')
+inp_ts_data_store.loadPointIdsData(configFilePath, pointsSheet="points")
+printWithTs('loading point Ids complete...', clr='green')
+
+# %%
 printWithTs('started regional profile report generation...', clr='magenta')
 # regional profile report generation
 regSummConfigSheet = 'regional_profile'

@@ -3,7 +3,7 @@ create Regional Profile Section data in the column sequence
 name, installed_capacity, max_avc, day_max_actual, day_max_actual_time, day_min_actual, day_min_actual_time, sch_mu, act_mu, dev_mu, cuf
 '''
 import pandas as pd
-from data_fetchers.inp_ts_data_store import getPntData
+from data_fetchers.inp_ts_data_store import getPntData, PointIdTypes, getEntityPointIds
 from data_fetchers.remc_data_store import getRemcPntData, FCA_FORECAST_VS_ACTUAL_STORE_NAME
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
@@ -46,8 +46,10 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
             continue
 
         timeValSeries = getPntData('HRS')
-        actPnt = confRow['actual_point']
-        avcPnt = confRow['avc_point']
+        entName = confRow['name']
+        entityIds = getEntityPointIds(entName)
+        actPnt =  entityIds[PointIdTypes.actual_point.value]
+        avcPnt = entityIds[PointIdTypes.avc_point.value]
         if ((avcPnt == '') or pd.isnull(avcPnt)):
             maxAvc = None
         else:
@@ -60,13 +62,13 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
         dayMinActual = getPntData(actPnt).min()
         dayMinActualTime = timeValSeries.iloc[getPntData(actPnt).idxmin()]
 
-        schMu = getPntData(confRow['sch_point']).mean()*0.024
+        schMu = getPntData(entityIds[PointIdTypes.sch_point.value]).mean()*0.024
         actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
-        installedCapacity = confRow['installed_capacity']
+        installedCapacity = entityIds[PointIdTypes.installed_capacity.value]
         cufPerc = (actMu*100000)/(24*installedCapacity)
 
-        resValsList.append({"name": confRow['name'],
+        resValsList.append({"name": entName,
                             "installed_capacity": installedCapacity,
                             "max_avc": maxAvc, "day_max_actual": dayMaxActual,
                             "day_max_actual_time": dayMaxActualTime, "day_min_actual": dayMinActual,
