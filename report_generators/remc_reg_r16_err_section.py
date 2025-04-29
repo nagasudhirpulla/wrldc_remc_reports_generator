@@ -4,6 +4,7 @@ Regional Solar, Regional Wind, Regional Combined (Solar+wind), ISTS Solar, ISTS 
 '''
 import pandas as pd
 from data_fetchers.remc_data_store import getRemcPntData, FCA_FORECAST_VS_ACTUAL_STORE_NAME
+from data_fetchers.inp_ts_data_store import PointIdTypes, getEntityPointIds
 from utils.remcFormulas import calcNrmsePerc, calcMapePerc
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
@@ -22,7 +23,7 @@ def getRemcRegionalR16ErrSectionDataDf(configFilePath, configSheetName):
     confDf = pd.read_excel(configFilePath, sheet_name=configSheetName)
     # confDf columns should be
     # name,r16_pnt,actual_pnt,cuf_pnt,avc_pnt,type
-    for stripCol in 'name,r16_pnt,actual_pnt,avc_pnt,type'.split(','):
+    for stripCol in 'name,type'.split(','):
         confDf[stripCol] = confDf[stripCol].str.strip()
 
     # initialize results
@@ -38,58 +39,58 @@ def getRemcRegionalR16ErrSectionDataDf(configFilePath, configSheetName):
                                 "combined": None})
 
     # get regional rows
-    solarConf = confDf[confDf['name'] == 'solar'].squeeze()
-    windConf = confDf[confDf['name'] == 'wind'].squeeze()
-    combinedConf = confDf[confDf['name'] == 'combined'].squeeze()
+    # solarConf = confDf[confDf['name'] == 'solar'].squeeze()
+    # windConf = confDf[confDf['name'] == 'wind'].squeeze()
+    # combinedConf = confDf[confDf['name'] == 'combined'].squeeze()
 
     # get data values
     regSolActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, solarConf['actual_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('SOLAR')[PointIdTypes.actual_pnt_sch.value])
     regSolR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, solarConf['r16_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('SOLAR')[PointIdTypes.r16_pnt.value])
     regSolAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, solarConf['avc_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('SOLAR')[PointIdTypes.avc_point.value])
 
     regWindActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, windConf['actual_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('WIND')[PointIdTypes.actual_pnt_sch.value])
     regWindR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, windConf['r16_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('WIND')[PointIdTypes.r16_pnt.value])
     regWindAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, windConf['avc_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('WIND')[PointIdTypes.avc_point.value])
 
     regCombActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, combinedConf['actual_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total Wind & Solar')[PointIdTypes.actual_pnt_sch.value])
     regCombR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, combinedConf['r16_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total Wind & Solar')[PointIdTypes.r16_pnt.value])
     regCombAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, combinedConf['avc_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total Wind & Solar')[PointIdTypes.avc_point.value])
 
     # get ISTS rows
-    solarConf = confDf[confDf['name'] == 'ists_solar'].squeeze()
-    windConf = confDf[confDf['name'] == 'ists_wind'].squeeze()
-    combinedConf = confDf[confDf['name'] == 'ists_combined'].squeeze()
+    # solarConf = confDf[confDf['name'] == 'ists_solar'].squeeze()
+    # windConf = confDf[confDf['name'] == 'ists_wind'].squeeze()
+    # combinedConf = confDf[confDf['name'] == 'ists_combined'].squeeze()
 
     # get data values
     istsSolActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, solarConf['actual_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_solar')[PointIdTypes.actual_pnt_sch.value])
     istsSolR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, solarConf['r16_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_solar')[PointIdTypes.r16_pnt.value])
     istsSolAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, solarConf['avc_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_solar')[PointIdTypes.avc_point.value])
 
     istsWindActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, windConf['actual_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_wind')[PointIdTypes.actual_pnt_sch.value])
     istsWindR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, windConf['r16_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_wind')[PointIdTypes.r16_pnt.value])
     istsWindAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, windConf['avc_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_wind')[PointIdTypes.avc_point.value])
 
     istsCombActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, combinedConf['actual_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_combined')[PointIdTypes.actual_pnt_sch.value])
     istsCombR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, combinedConf['r16_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_combined')[PointIdTypes.r16_pnt.value])
     istsCombAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, combinedConf['avc_pnt'])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_combined')[PointIdTypes.avc_point.value])
 
     # calculate the output rows for region
     # calculate regional solar mape for r16

@@ -22,3 +22,7 @@ currently uses python 3.8.8
 * Ctrl + select all sheets execpt 'remc_graph_data', 'scada_graph_data' sheets and print the excel as pdf
 * Make sure all the files and folders are closed after successful report generation
 
+## TODOs
+* add pooling stations also in the points sheet
+* get point Ids of pooling stations also to be added in central location
+

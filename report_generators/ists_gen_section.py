@@ -3,10 +3,11 @@ create Ists Generation Section data in the column sequence
 name,installed_capacity,max_avc,day_max_actual,day_max_actual_time,day_min_actual,day_min_actual_time,sch_mu,act_mu,dev_mu,cuf
 '''
 import pandas as pd
-from data_fetchers.inp_ts_data_store import getPntData
+from data_fetchers.inp_ts_data_store import getPntData, PointIdTypes, getEntityPointIds
 from data_fetchers.remc_data_store import getRemcPntData, FCA_FORECAST_VS_ACTUAL_STORE_NAME
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
+from utils.stringUtils import joinWith
 
 
 def populateIstsGenSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
@@ -53,13 +54,21 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
             aggIdentifier = confRow[aggColName]
             confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
                                             == aggIdentifier]
-            avcPnt = ','.join(confDfForAgg['avc_id'].dropna().tolist())
-            actPnt = ','.join(confDfForAgg['act_id'].tolist())
-            schPnt = ','.join(confDfForAgg['sch_id'].tolist())
+            avcPnt = joinWith([getEntityPointIds(entName)[PointIdTypes.avc_point.value]
+                              for entName in confDfForAgg['name'].dropna().tolist()])
+            actPnt = joinWith([getEntityPointIds(entName)[PointIdTypes.actual_point.value]
+                              for entName in confDfForAgg['name'].tolist()])
+            schPnt = joinWith([getEntityPointIds(entName)[PointIdTypes.sch_point.value]
+                              for entName in confDfForAgg['name'].tolist()])
+            installedCapacity = sum([getEntityPointIds(entName)[PointIdTypes.installed_capacity.value]
+                                     for entName in confDfForAgg['name'].tolist()])
         else:
-            avcPnt = confRow['avc_id']
-            actPnt = confRow['act_id']
-            schPnt = confRow['sch_id']
+            entName = confRow['name']
+            entityIds = getEntityPointIds(entName)
+            actPnt = entityIds[PointIdTypes.actual_point.value]
+            avcPnt = entityIds[PointIdTypes.avc_point.value]
+            schPnt = entityIds[PointIdTypes.sch_point.value]
+            installedCapacity = entityIds[PointIdTypes.installed_capacity.value]
 
         if ((avcPnt == '') or pd.isnull(avcPnt)):
             maxAvc = None
@@ -85,7 +94,7 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
         schMu = getPntData(schPnt).mean()*0.024
         actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
-        installedCapacity = confRow['installed_capacity']
+        # installedCapacity = confRow['installed_capacity']
         cufPerc = (actMu*100000)/(24*installedCapacity)
 
         resValsList.append({"name": confRow['name'],
