@@ -4,9 +4,11 @@ name,r0_mape,r0_nrmse,r16_mape,r16_nrmse
 '''
 import pandas as pd
 from data_fetchers.remc_data_store import getRemcPntData, FCA_FORECAST_VS_ACTUAL_STORE_NAME
+from data_fetchers.inp_ts_data_store import PointIdTypes, getEntityPointIds
 from utils.remcFormulas import calcNrmsePerc, calcMapePerc
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
+from utils.stringUtils import joinWith
 
 
 def populateRemcStateErrSummSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
@@ -22,7 +24,7 @@ def getRemcStateErrSummSectionDataDf(configFilePath, configSheetName):
     confDf = pd.read_excel(configFilePath, sheet_name=configSheetName)
     # confDf columns should be
     # name,r0_pnt,r16_pnt,actual_pnt,cuf_pnt,avc_pnt,type,state,gen_type,gen_type_2
-    for stripCol in 'name,r0_pnt,r16_pnt,actual_pnt,avc_pnt,type,state,gen_type,gen_type_2'.split(','):
+    for stripCol in 'name,type,state,gen_type,gen_type_2'.split(','):
         confDf[stripCol] = confDf[stripCol].str.strip()
 
     normalPntsConfDf = confDf[(confDf['type'] == 'normal') | (
@@ -49,15 +51,21 @@ def getRemcStateErrSummSectionDataDf(configFilePath, configSheetName):
             aggIdentifier = confRow[aggColName]
             confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
                                             == aggIdentifier]
-            avcPnt = ','.join(confDfForAgg['avc_pnt'].tolist())
-            actPnt = ','.join(confDfForAgg['actual_pnt'].tolist())
-            r0Pnt = ','.join(confDfForAgg['r0_pnt'].tolist())
-            r16Pnt = ','.join(confDfForAgg['r16_pnt'].tolist())
+            avcPnt = joinWith([getEntityPointIds(entName)[PointIdTypes.avc_point.value]
+                              for entName in confDfForAgg['name'].dropna().tolist()])
+            actPnt = joinWith([getEntityPointIds(entName)[PointIdTypes.actual_pnt_sch.value]
+                              for entName in confDfForAgg['name'].tolist()])
+            r0Pnt = joinWith([getEntityPointIds(entName)[PointIdTypes.r0_pnt.value]
+                              for entName in confDfForAgg['name'].tolist()])
+            r16Pnt = joinWith([getEntityPointIds(entName)[PointIdTypes.r16_pnt.value]
+                              for entName in confDfForAgg['name'].tolist()])
         else:
-            avcPnt = confRow['avc_pnt']
-            actPnt = confRow['actual_pnt']
-            r0Pnt = confRow['r0_pnt']
-            r16Pnt = confRow['r16_pnt']
+            entName = confRow['name']
+            entityIds = getEntityPointIds(entName)
+            avcPnt = entityIds[PointIdTypes.avc_point.value]
+            actPnt = entityIds[PointIdTypes.actual_pnt_sch.value]
+            r0Pnt = entityIds[PointIdTypes.r0_pnt.value]
+            r16Pnt = entityIds[PointIdTypes.r16_pnt.value]
 
         avcVals = getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).tolist()
         r0Vals = getRemcPntData(FCA_FORECAST_VS_ACTUAL_STORE_NAME, r0Pnt).tolist()

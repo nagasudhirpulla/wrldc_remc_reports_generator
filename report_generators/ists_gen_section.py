@@ -83,7 +83,7 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName):
                     pntAvcVals = getRemcPntData(
                         FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPntId)
                 avcVals = avcVals.add(pntAvcVals, fill_value=0)
-            maxAvc = avcVals.max()
+            maxAvc = min(installedCapacity, avcVals.max())
 
         dayMaxActual = getPntData(actPnt).max()
         dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]

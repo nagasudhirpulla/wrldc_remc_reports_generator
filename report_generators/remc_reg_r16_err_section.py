@@ -66,31 +66,31 @@ def getRemcRegionalR16ErrSectionDataDf(configFilePath, configSheetName):
         FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total Wind & Solar')[PointIdTypes.avc_point.value])
 
     # get ISTS rows
-    # solarConf = confDf[confDf['name'] == 'ists_solar'].squeeze()
-    # windConf = confDf[confDf['name'] == 'ists_wind'].squeeze()
-    # combinedConf = confDf[confDf['name'] == 'ists_combined'].squeeze()
+    # solarConf = confDf[confDf['name'] == 'Total ISTS Solar'].squeeze()
+    # windConf = confDf[confDf['name'] == 'Total ISTS Wind'].squeeze()
+    # combinedConf = confDf[confDf['name'] == 'Total ISTS RE'].squeeze()
 
     # get data values
     istsSolActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_solar')[PointIdTypes.actual_pnt_sch.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS Solar')[PointIdTypes.actual_pnt_sch.value])
     istsSolR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_solar')[PointIdTypes.r16_pnt.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS Solar')[PointIdTypes.r16_pnt.value])
     istsSolAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_solar')[PointIdTypes.avc_point.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS Solar')[PointIdTypes.avc_point.value])
 
     istsWindActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_wind')[PointIdTypes.actual_pnt_sch.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS Wind')[PointIdTypes.actual_pnt_sch.value])
     istsWindR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_wind')[PointIdTypes.r16_pnt.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS Wind')[PointIdTypes.r16_pnt.value])
     istsWindAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_wind')[PointIdTypes.avc_point.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS Wind')[PointIdTypes.avc_point.value])
 
     istsCombActVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_combined')[PointIdTypes.actual_pnt_sch.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS RE')[PointIdTypes.actual_pnt_sch.value])
     istsCombR16Vals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_combined')[PointIdTypes.r16_pnt.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS RE')[PointIdTypes.r16_pnt.value])
     istsCombAvcVals = getRemcPntData(
-        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('ists_combined')[PointIdTypes.avc_point.value])
+        FCA_FORECAST_VS_ACTUAL_STORE_NAME, getEntityPointIds('Total ISTS RE')[PointIdTypes.avc_point.value])
 
     # calculate the output rows for region
     # calculate regional solar mape for r16

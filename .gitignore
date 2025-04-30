@@ -9,6 +9,7 @@
 .history/
 
 output/*.xlsx
+output/**/*.pdf
 output/**/*.csv
 dummy_data/*.xlsx
 input_data/**/*.csv
@@ -17,6 +18,7 @@ build/*
 remc_report_dist/*
 project_env/
 *.spec
+*.tmp
 
 # excel temp files ignore
 ~*

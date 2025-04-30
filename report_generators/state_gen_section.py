@@ -71,8 +71,8 @@ def getStateGenSectionDataDf(configFilePath, configSheetName):
         if ((avcPnt == '') or pd.isnull(avcPnt)):
             maxAvc = None
         else:
-            maxAvc = getRemcPntData(
-                FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()
+            maxAvc = min(installedCapacity, getRemcPntData(
+                FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max())
         dayMaxActual = getPntData(actPnt).max()
         dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]
 

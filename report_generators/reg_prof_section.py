@@ -48,13 +48,14 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
         timeValSeries = getPntData('HRS')
         entName = confRow['name']
         entityIds = getEntityPointIds(entName)
+        installedCapacity = entityIds[PointIdTypes.installed_capacity.value]
         actPnt =  entityIds[PointIdTypes.actual_point.value]
         avcPnt = entityIds[PointIdTypes.avc_point.value]
         if ((avcPnt == '') or pd.isnull(avcPnt)):
             maxAvc = None
         else:
-            maxAvc = getRemcPntData(
-                FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max()
+            maxAvc = min(installedCapacity, getRemcPntData(
+                FCA_FORECAST_VS_ACTUAL_STORE_NAME, avcPnt).max())
 
         dayMaxActual = getPntData(actPnt).max()
         dayMaxActualTime = timeValSeries.iloc[getPntData(actPnt).idxmax()]
@@ -65,7 +66,6 @@ def getRegProfSectionDataDf(configFilePath, configSheetName):
         schMu = getPntData(entityIds[PointIdTypes.sch_point.value]).mean()*0.024
         actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
-        installedCapacity = entityIds[PointIdTypes.installed_capacity.value]
         cufPerc = (actMu*100000)/(24*installedCapacity)
 
         resValsList.append({"name": entName,

@@ -4,9 +4,11 @@ name,max,min,avg
 '''
 import pandas as pd
 from data_fetchers.remc_data_store import getRemcPntData, FCA_DAY_AHEAD_STORE_NAME
+from data_fetchers.inp_ts_data_store import PointIdTypes, getEntityPointIds
 from utils.remcFormulas import calcNrmsePerc, calcMapePerc
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
+from utils.stringUtils import joinWith
 
 
 def populateRemcStateDaSummSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, truncateSheet=False):
@@ -22,7 +24,7 @@ def getRemcStateDaSummSectionDataDf(configFilePath, configSheetName):
     confDf = pd.read_excel(configFilePath, sheet_name=configSheetName)
     # confDf columns should be
     # name,type,forecast_pnt,state,gen_type,gen_type2
-    for stripCol in 'name,type,forecast_pnt,state,gen_type,gen_type2'.split(','):
+    for stripCol in 'name,type,state,gen_type,gen_type2'.split(','):
         confDf[stripCol] = confDf[stripCol].str.strip()
 
     normalPntsConfDf = confDf[(confDf['type'] == 'normal') | (
@@ -49,9 +51,12 @@ def getRemcStateDaSummSectionDataDf(configFilePath, configSheetName):
             aggIdentifier = confRow[aggColName]
             confDfForAgg = normalPntsConfDf[normalPntsConfDf[aggColName]
                                             == aggIdentifier]
-            forecastPnt = ','.join(confDfForAgg['forecast_pnt'].tolist())
+            forecastPnt = joinWith([getEntityPointIds(entName)[PointIdTypes.forecast_point.value]
+                              for entName in confDfForAgg['name'].tolist()])
         else:
-            forecastPnt = confRow['forecast_pnt']
+            entName = confRow['name']
+            entityIds = getEntityPointIds(entName)
+            forecastPnt = entityIds[PointIdTypes.forecast_point.value]
 
         forecastSeries = getRemcPntData(FCA_DAY_AHEAD_STORE_NAME, forecastPnt)
 
