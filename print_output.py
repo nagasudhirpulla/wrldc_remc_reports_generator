@@ -1,9 +1,22 @@
 import win32com.client
 import os
 import datetime as dt
+from utils.printUtils import printWithTs
+from report_generators.nldc_report_generator import generateNldcReport
 
 # Excel file path
 excel_file_path = os.path.abspath("output/report_template.xlsx")
+
+# create NLDC CSV file
+srcReportPath = 'output/report_template.xlsx'
+srcShNames = ["Daily REMC Report_Part1",
+              "Daily REMC Report_Part2", "Daily REMC Report_Part3"]
+
+yestDateStr = dt.datetime.strftime(
+    dt.datetime.now() - dt.timedelta(days=1), '%Y_%m_%d')
+outputCsvPath = 'output/nldc/nldc_remc_data_{0}.csv'.format(yestDateStr)
+generateNldcReport(srcReportPath, srcShNames, outputCsvPath)
+printWithTs('NLDC Report preparation done !', clr='green')
 
 # PDF output path
 reqDt = dt.datetime.now()-dt.timedelta(days=1)
@@ -29,7 +42,7 @@ for sheet_name in sheet_names:
         worksheet = workbook.Sheets(sheet_name)
         worksheets.append(worksheet)
     except Exception as e:
-        print(f"Sheet '{sheet_name}' not found: {e}")
+        printWithTs(f"Sheet '{sheet_name}' not found: {e}", clr='magenta')
 
 # Select the desired sheets
 workbook.Worksheets(tuple(worksheet.Name for worksheet in worksheets)).Select()
@@ -37,9 +50,9 @@ workbook.Worksheets(tuple(worksheet.Name for worksheet in worksheets)).Select()
 # Export selected sheets to PDF
 try:
     workbook.ActiveSheet.ExportAsFixedFormat(0, pdf_file_path)
-    print("PDF created successfully.")
+    printWithTs('PDF created successfully !', clr='green')
 except Exception as e:
-    print(f"Error creating PDF: {e}")
+    printWithTs(f"Error creating PDF: {e}", clr='magenta')
 
 # Select the first sheet
 workbook.Worksheets((worksheets[0].Name)).Select()
