@@ -2,5 +2,9 @@
     "ftpHost": "",
     "ftpUsername": "",
     "ftpPassword": "",
-    "ftpDumpFolder": ""
+    "ftpDumpFolder": "",
+    "wbesApiBase": "",
+    "wbesapiKey": "",
+    "wbesUname": "",
+    "wbesPwd": ""
 }

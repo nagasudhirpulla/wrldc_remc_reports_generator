@@ -27,6 +27,7 @@ class PointIdTypes(str, enum.Enum):
     cuf_pnt = 'cuf_pnt',
     avc_point = 'avc_point',
     forecast_point = 'forecast_point'
+    wbes_acr = 'wbes_acr'
 
 def loadGenTsData():
     global tsDataDf

@@ -100,7 +100,7 @@ printWithTs('started ists generation report generation...', clr='magenta')
 istsGenConfigSheet = 'ists_gen'
 istsGenOutputSheet = 'Daily REMC Report_Part1'
 populateIstsGenSectionData(
-    configFilePath, istsGenConfigSheet, outputFilePath, istsGenOutputSheet)
+    configFilePath, istsGenConfigSheet, outputFilePath, istsGenOutputSheet, reqDt=dt.datetime.now()-dt.timedelta(days=1))
 printWithTs('ISTS generation report section data dump complete...', clr='green')
 
 # %%
