@@ -14,12 +14,13 @@ class WbesSchTypeEnum(enum.Enum):
     TRAS_EMERGENCY = 2
 
 
-def getWbesSch(configFilePath: str, utilAcr: str, reqDt: dt.datetime, schType: WbesSchTypeEnum):
-    utilAcronyms = getFromJoined(utilAcr)
-    return sum([getWbesSinglePntSch(configFilePath, wbesAcr, reqDt, schType) for wbesAcr in utilAcronyms])
+# TODO implement this
+# def getWbesSch(configFilePath: str, utilAcr: str, reqDt: dt.datetime, schType: WbesSchTypeEnum):
+#     utilAcronyms = getFromJoined(utilAcr)
+#     return sum([getWbesSinglePntSch(configFilePath, wbesAcr, reqDt, schType) for wbesAcr in utilAcronyms])
 
 
-def getWbesSinglePntSch(configFilePath: str, utilAcr: str, reqDt: dt.datetime, schType: WbesSchTypeEnum):
+def getWbesAcronymsSch(configFilePath: str, utilAcrs: list, reqDt: dt.datetime):
     # get config from json
     configDict = {}
     with open(configFilePath) as f:
@@ -32,7 +33,7 @@ def getWbesSinglePntSch(configFilePath: str, utilAcr: str, reqDt: dt.datetime, s
                              json={"Date": dt.datetime.strftime(reqDt, "%d-%m-%Y"),
                                    "SchdRevNo": -1,
                                    "UserName": wbesUname,
-                                   "UtilAcronymList": [utilAcr],
+                                   "UtilAcronymList": utilAcrs,
                                    "UtilRegionIdList": [2]  # 2 is for WR
                                    },
                              auth=HTTPBasicAuth(wbesUname, wbesPwd))
@@ -40,18 +41,23 @@ def getWbesSinglePntSch(configFilePath: str, utilAcr: str, reqDt: dt.datetime, s
         printWithTs(f"Error: {response.status_code}", clr='magenta')
         return None
     json_data = response.json()
-    # print(json_data)
-    if schType == WbesSchTypeEnum.NET_MU:
-        netSchVals = json_data['ResponseBody']['GroupWiseDataList'][0]['NetScheduleSummary']['TotalNetSchdAmount']
+    # with open("data.json", "w") as file:
+    #     json.dump(json_data, file, indent=4)
+    acronymsData = json_data['ResponseBody']['GroupWiseDataList']
+    schData = {}
+    for acrData in acronymsData:
+        acrName = acrData['Acronym']
+
+        netSchVals = acrData['NetScheduleSummary']['TotalNetSchdAmount']
         netMuVal = statistics.mean(netSchVals)*0.024
-        return netMuVal
-    elif schType == WbesSchTypeEnum.TRAS_EMERGENCY:
-        allSchData: list[object] = json_data['ResponseBody']['GroupWiseDataList'][0]['NetScheduleSummary']['NetSchdDataList']
+
+        allSchData: list[object] = acrData['NetScheduleSummary']['NetSchdDataList']
         # find a list item where EnergyScheduleTypeName=AS and ASTypeName=EMERGENCY
         trasEmSchVals = [x for x in allSchData if x["EnergyScheduleTypeName"]
                          == "AS" and x["ASTypeName"] == "EMERGENCY"][0]['NetSchdAmount']
-        trasEmSchMuVal = statistics.mean(trasEmSchVals)*0.024
-        return trasEmSchMuVal
-    else:
-        printWithTs("Unknown sch type given", clr='magenta')
-    return None
+        trasEmMuVal = statistics.mean(trasEmSchVals)*0.024
+        schData[acrName] = {
+            'netMu': netMuVal,
+            'trasEmMu': trasEmMuVal
+        }
+    return schData
