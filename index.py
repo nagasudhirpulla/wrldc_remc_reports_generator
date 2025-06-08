@@ -26,8 +26,11 @@ from data_fetchers.remc_data_store import IFT_FORECAST_VS_ACTUAL_STORE_NAME, IFT
 from data_fetchers.remc_data_store import ALEA_FORECAST_VS_ACTUAL_STORE_NAME, ALEA_DAY_AHEAD_STORE_NAME
 from data_fetchers.remc_data_store import RES_FORECAST_VS_ACTUAL_STORE_NAME, RES_DAY_AHEAD_STORE_NAME
 from data_fetchers.remc_data_store import ENER_FORECAST_VS_ACTUAL_STORE_NAME, ENER_DAY_AHEAD_STORE_NAME
+from data_fetchers.wbes_data_store import loadWbesAcronymsSch
 import datetime as dt
+import json
 import argparse
+import pandas as pd
 from utils.printUtils import printWithTs
 from report_generators.paste_report_data import pasteDataToTemplateFile
 from report_generators.nldc_report_generator import generateNldcReport, transferNldcRepToSftpLocation
@@ -81,9 +84,25 @@ templateFilePath = args.template
 printWithTs('parsing input arguments done...', clr='green')
 
 # %%
+# get app config from json
+# TODO move to global variable
+appConfigDict = {}
+with open(appConfigFilePath) as f:
+    appConfigDict = json.load(f)
+
+# %%
 printWithTs('loading point Ids started...', clr='magenta')
 inp_ts_data_store.loadPointIdsData(configFilePath, pointsSheet="points")
 printWithTs('loading point Ids complete...', clr='green')
+
+# %%
+# load WBES data store
+printWithTs('loading WBES data started...', clr='magenta')
+# get acronyms list from config excel points sheet "wbes_acr" column
+wbesAcrCol = 'wbes_acr'
+utilAcrs = pd.read_excel(configFilePath, sheet_name='points', usecols=[wbesAcrCol])[wbesAcrCol].dropna().to_list() 
+loadWbesAcronymsSch(utilAcrs, appConfigDict, dt.datetime.now())
+printWithTs('loading WBES data complete...', clr='green')
 
 # %%
 printWithTs('started regional profile report generation...', clr='magenta')

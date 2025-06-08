@@ -9,7 +9,7 @@ from data_fetchers.remc_data_store import getRemcPntData, FCA_FORECAST_VS_ACTUAL
 from utils.excel_utils import append_df_to_excel
 from utils.printUtils import printWithTs
 from utils.stringUtils import joinWith
-from utils.wbesUtils import WbesSchTypeEnum, getWbesSch
+from data_fetchers.wbes_data_store import WbesSchTypeEnum, getWbesAcrSch
 
 
 def populateIstsGenSectionData(configFilePath, configSheetName, outputFilePath, outputSheetName, reqDt: dt.datetime, truncateSheet=False):
@@ -98,8 +98,7 @@ def getIstsGenSectionDataDf(configFilePath, configSheetName, reqDt: dt.datetime)
         dayMinActualTime = timeValSeries.iloc[getPntData(actPnt).idxmin()]
 
         # schMu = getPntData(schPnt).mean()*0.024
-        schMu = getWbesSch(configFilePath, wbesAcr, reqDt,
-                           schType=WbesSchTypeEnum.TRAS_EMERGENCY)
+        schMu = getWbesAcrSch(wbesAcr, schType=WbesSchTypeEnum.NET_MU)
         actMu = getPntData(actPnt).mean()*0.024
         devMu = actMu - schMu
         # installedCapacity = confRow['installed_capacity']

@@ -1,5 +1,4 @@
 import requests
-import json
 import datetime as dt
 import statistics
 from requests.auth import HTTPBasicAuth
@@ -14,21 +13,18 @@ class WbesSchTypeEnum(enum.Enum):
     TRAS_EMERGENCY = 2
 
 
-# TODO implement this
-# def getWbesSch(configFilePath: str, utilAcr: str, reqDt: dt.datetime, schType: WbesSchTypeEnum):
-#     utilAcronyms = getFromJoined(utilAcr)
-#     return sum([getWbesSinglePntSch(configFilePath, wbesAcr, reqDt, schType) for wbesAcr in utilAcronyms])
+def getWbesAcrSch(utilAcr: str, schType: WbesSchTypeEnum):
+    global wbesDataStore
+    utilAcronyms = getFromJoined(utilAcr)
+    return sum([wbesDataStore[wbesAcr][schType] for wbesAcr in utilAcronyms])
 
 
-def getWbesAcronymsSch(configFilePath: str, utilAcrs: list, reqDt: dt.datetime):
-    # get config from json
-    configDict = {}
-    with open(configFilePath) as f:
-        configDict = json.load(f)
-    wbesApiBase = configDict['wbesApiBase']
-    wbesapiKey = configDict['wbesapiKey']
-    wbesUname = configDict['wbesUname']
-    wbesPwd = configDict['wbesPwd']
+def loadWbesAcronymsSch(utilAcrs: list, appConfig: dict, reqDt: dt.datetime):
+    global wbesDataStore
+    wbesApiBase = appConfig['wbesApiBase']
+    wbesapiKey = appConfig['wbesapiKey']
+    wbesUname = appConfig['wbesUname']
+    wbesPwd = appConfig['wbesPwd']
     response = requests.post(url=wbesApiBase, params={"apiKey": wbesapiKey},
                              json={"Date": dt.datetime.strftime(reqDt, "%d-%m-%Y"),
                                    "SchdRevNo": -1,
@@ -49,7 +45,7 @@ def getWbesAcronymsSch(configFilePath: str, utilAcrs: list, reqDt: dt.datetime):
         acrName = acrData['Acronym']
 
         netSchVals = acrData['NetScheduleSummary']['TotalNetSchdAmount']
-        netMuVal = statistics.mean(netSchVals)*0.024
+        netMuVal = max(0, -0.024*statistics.mean(netSchVals))
 
         allSchData: list[object] = acrData['NetScheduleSummary']['NetSchdDataList']
         # find a list item where EnergyScheduleTypeName=AS and ASTypeName=EMERGENCY
@@ -57,7 +53,14 @@ def getWbesAcronymsSch(configFilePath: str, utilAcrs: list, reqDt: dt.datetime):
                          == "AS" and x["ASTypeName"] == "EMERGENCY"][0]['NetSchdAmount']
         trasEmMuVal = statistics.mean(trasEmSchVals)*0.024
         schData[acrName] = {
-            'netMu': netMuVal,
-            'trasEmMu': trasEmMuVal
+            WbesSchTypeEnum.NET_MU: netMuVal,
+            WbesSchTypeEnum.TRAS_EMERGENCY: trasEmMuVal
         }
-    return schData
+    # add missing acronyms with 0.0 values
+    for u in utilAcrs:
+        if u not in schData:
+            schData[u] = {
+                WbesSchTypeEnum.NET_MU: 0.0,
+                WbesSchTypeEnum.TRAS_EMERGENCY: 0.0
+            }
+    wbesDataStore = schData

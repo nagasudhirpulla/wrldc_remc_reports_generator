@@ -23,6 +23,8 @@ currently uses python 3.8.8
 * Make sure all the files and folders are closed after successful report generation
 
 ## TODOs
+* add feature to specify report date instead of yesterday. Also set the required date in report template using openpyxl
+* create TRAS Emergency down data csv while running the report 
 * add pooling stations also in the points sheet
 * get point Ids of pooling stations also to be added in central location
 
