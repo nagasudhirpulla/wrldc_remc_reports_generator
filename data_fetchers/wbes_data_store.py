@@ -18,6 +18,9 @@ def getWbesAcrSch(utilAcr: str, schType: WbesSchTypeEnum):
     utilAcronyms = getFromJoined(utilAcr)
     return sum([wbesDataStore[wbesAcr][schType] for wbesAcr in utilAcronyms])
 
+def getWbesDataStore():
+    global wbesDataStore
+    return wbesDataStore
 
 def loadWbesAcronymsSch(utilAcrs: list, appConfig: dict, reqDt: dt.datetime):
     global wbesDataStore
@@ -29,7 +32,7 @@ def loadWbesAcronymsSch(utilAcrs: list, appConfig: dict, reqDt: dt.datetime):
                              json={"Date": dt.datetime.strftime(reqDt, "%d-%m-%Y"),
                                    "SchdRevNo": -1,
                                    "UserName": wbesUname,
-                                   "UtilAcronymList": utilAcrs,
+                                   "UtilAcronymList": list(set(utilAcrs)),
                                    "UtilRegionIdList": [2]  # 2 is for WR
                                    },
                              auth=HTTPBasicAuth(wbesUname, wbesPwd))
@@ -59,6 +62,7 @@ def loadWbesAcronymsSch(utilAcrs: list, appConfig: dict, reqDt: dt.datetime):
     # add missing acronyms with 0.0 values
     for u in utilAcrs:
         if u not in schData:
+            printWithTs(f"wbes data not fetched for {u}")
             schData[u] = {
                 WbesSchTypeEnum.NET_MU: 0.0,
                 WbesSchTypeEnum.TRAS_EMERGENCY: 0.0

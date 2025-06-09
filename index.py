@@ -34,6 +34,7 @@ import pandas as pd
 from utils.printUtils import printWithTs
 from report_generators.paste_report_data import pasteDataToTemplateFile
 from report_generators.nldc_report_generator import generateNldcReport, transferNldcRepToSftpLocation
+from report_generators.trasEm_report_generator import generateTrasEmReport
 
 printWithTs('imports complete...', clr='green')
 
@@ -89,7 +90,7 @@ printWithTs('parsing input arguments done...', clr='green')
 appConfigDict = {}
 with open(appConfigFilePath) as f:
     appConfigDict = json.load(f)
-
+reportForDate = dt.datetime.now()-dt.timedelta(days=1)
 # %%
 printWithTs('loading point Ids started...', clr='magenta')
 inp_ts_data_store.loadPointIdsData(configFilePath, pointsSheet="points")
@@ -105,6 +106,12 @@ loadWbesAcronymsSch(utilAcrs, appConfigDict, dt.datetime.now())
 printWithTs('loading WBES data complete...', clr='green')
 
 # %%
+printWithTs('expoting TRAS Emergency schedule started...', clr='magenta')
+
+trasOutputCsvPath = 'output/nldc/tras_{0}.csv'.format(reportForDate.strftime("%Y_%m_%d"))
+generateTrasEmReport(trasOutputCsvPath)
+printWithTs('expoting TRAS Emergency schedule complete...', clr='green')
+# %%
 printWithTs('started regional profile report generation...', clr='magenta')
 # regional profile report generation
 regSummConfigSheet = 'regional_profile'
@@ -119,7 +126,7 @@ printWithTs('started ists generation report generation...', clr='magenta')
 istsGenConfigSheet = 'ists_gen'
 istsGenOutputSheet = 'Daily REMC Report_Part1'
 populateIstsGenSectionData(
-    configFilePath, istsGenConfigSheet, outputFilePath, istsGenOutputSheet, reqDt=dt.datetime.now()-dt.timedelta(days=1))
+    configFilePath, istsGenConfigSheet, outputFilePath, istsGenOutputSheet, reqDt=reportForDate)
 printWithTs('ISTS generation report section data dump complete...', clr='green')
 
 # %%
