@@ -32,29 +32,12 @@ import json
 import argparse
 import pandas as pd
 from utils.printUtils import printWithTs
+from utils.dateUtils import setReportForDate, getReportForDate
 from report_generators.paste_report_data import pasteDataToTemplateFile
 from report_generators.nldc_report_generator import generateNldcReport, transferNldcRepToSftpLocation
 from report_generators.trasEm_report_generator import generateTrasEmReport
 
 printWithTs('imports complete...', clr='green')
-
-
-# %%
-printWithTs('loading SCADA Total ISTS Gen data...', clr='magenta')
-# initialize timeseries datastore
-inp_ts_data_store.loadGenTsData()
-# x = inp_ts_data_store.tsDataDf
-printWithTs('done loading SCADA Total ISTS Gen data store...', clr='green')
-
-# %%
-printWithTs(
-    'started loading REMC FCA Forecast Vs Actual data store...', clr='magenta')
-# initialize REMC FCA forecast Vs actual timeseries datastore
-loadRemcDataStore(FCA_FORECAST_VS_ACTUAL_STORE_NAME)
-# x = inp_ts_data_store.tsDataDf
-printWithTs(
-    'REMC FCA Forecast Vs Actual data store loading complete...', clr='green')
-
 # %%
 # file paths init
 configFilePath = "config/remc_report_config.xlsx"
@@ -90,7 +73,25 @@ printWithTs('parsing input arguments done...', clr='green')
 appConfigDict = {}
 with open(appConfigFilePath) as f:
     appConfigDict = json.load(f)
-reportForDate = dt.datetime.now()-dt.timedelta(days=1)
+setReportForDate(appConfigDict["reportForDate"])
+reportForDate = getReportForDate()
+
+# %%
+printWithTs('loading SCADA Total ISTS Gen data...', clr='magenta')
+# initialize timeseries datastore
+inp_ts_data_store.loadGenTsData()
+# x = inp_ts_data_store.tsDataDf
+printWithTs('done loading SCADA Total ISTS Gen data store...', clr='green')
+
+# %%
+printWithTs(
+    'started loading REMC FCA Forecast Vs Actual data store...', clr='magenta')
+# initialize REMC FCA forecast Vs actual timeseries datastore
+loadRemcDataStore(FCA_FORECAST_VS_ACTUAL_STORE_NAME)
+# x = inp_ts_data_store.tsDataDf
+printWithTs(
+    'REMC FCA Forecast Vs Actual data store loading complete...', clr='green')
+
 # %%
 printWithTs('loading point Ids started...', clr='magenta')
 inp_ts_data_store.loadPointIdsData(configFilePath, pointsSheet="points")
@@ -101,14 +102,16 @@ printWithTs('loading point Ids complete...', clr='green')
 printWithTs('loading WBES data started...', clr='magenta')
 # get acronyms list from config excel points sheet "wbes_acr" column
 wbesAcrCol = 'wbes_acr'
-utilAcrs = pd.read_excel(configFilePath, sheet_name='points', usecols=[wbesAcrCol])[wbesAcrCol].dropna().to_list() 
-loadWbesAcronymsSch(utilAcrs, appConfigDict, dt.datetime.now())
+utilAcrs = pd.read_excel(configFilePath, sheet_name='points', usecols=[
+                         wbesAcrCol])[wbesAcrCol].dropna().to_list()
+loadWbesAcronymsSch(utilAcrs, appConfigDict, reportForDate)
 printWithTs('loading WBES data complete...', clr='green')
 
 # %%
 printWithTs('expoting TRAS Emergency schedule started...', clr='magenta')
 
-trasOutputCsvPath = 'output/nldc/tras_{0}.csv'.format(reportForDate.strftime("%Y_%m_%d"))
+trasOutputCsvPath = 'output/nldc/tras_{0}.csv'.format(
+    reportForDate.strftime("%Y_%m_%d"))
 generateTrasEmReport(trasOutputCsvPath)
 printWithTs('expoting TRAS Emergency schedule complete...', clr='green')
 # %%
@@ -365,9 +368,8 @@ printWithTs('REMC Graph data report section data dump complete...', clr='green')
 # %%
 # pasting SCADA data availability data to template
 scadaAvailabilityOutputSheet = "Daily REMC Report_Part2"
-reqDt = dt.datetime.now()-dt.timedelta(days=1)
 pasteScadaAvailToTemplateFile(
-    reqDt, templateFilePath, scadaAvailabilityOutputSheet)
+    reportForDate, templateFilePath, scadaAvailabilityOutputSheet)
 printWithTs('Data pasting completed for SCADA availability...', clr='green')
 
 # %%
@@ -381,9 +383,7 @@ srcReportPath = 'output/report_template.xlsx'
 srcShNames = ["Daily REMC Report_Part1",
               "Daily REMC Report_Part2", "Daily REMC Report_Part3"]
 
-yestDateStr = dt.datetime.strftime(
-    dt.datetime.now() - dt.timedelta(days=1), '%Y_%m_%d')
-outputCsvPath = 'output/nldc/nldc_remc_data_{0}.csv'.format(yestDateStr)
+outputCsvPath = f'output/nldc/nldc_remc_data_{reportForDate.strftime("%Y_%m_%d")}.csv'
 generateNldcReport(srcReportPath, srcShNames, outputCsvPath)
 printWithTs('NLDC Report preparation done !', clr='green')
 

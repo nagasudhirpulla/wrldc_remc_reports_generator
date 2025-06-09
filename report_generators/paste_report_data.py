@@ -1,5 +1,7 @@
 from openpyxl import load_workbook
 from utils.printUtils import printWithTs
+from utils.dateUtils import getReportForDate
+import datetime as dt
 
 
 def pasteDataToTemplateFile(dataFile, templateFile):
@@ -41,6 +43,8 @@ def pasteDataToTemplateFile(dataFile, templateFile):
                     row=rowIter, column=colIter).value = cellVal
 
     printWithTs('done pasting data to template', clr='green')
+    # TODO avoid hard coding
+    templWb["Daily REMC Report_Part1"]["K3"] = getReportForDate()+dt.timedelta(days=1)
     # saving the destination excel file
     printWithTs('Saving report template after pasting')
     templWb.save(str(templateFile))

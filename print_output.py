@@ -1,26 +1,30 @@
 import win32com.client
 import os
-import datetime as dt
+from utils.dateUtils import getReportForDate, setReportForDate
 from utils.printUtils import printWithTs
 from report_generators.nldc_report_generator import generateNldcReport
+from openpyxl import load_workbook
 
-# Excel file path
-excel_file_path = os.path.abspath("output/report_template.xlsx")
 
 # create NLDC CSV file
 srcReportPath = 'output/report_template.xlsx'
 srcShNames = ["Daily REMC Report_Part1",
               "Daily REMC Report_Part2", "Daily REMC Report_Part3"]
 
-yestDateStr = dt.datetime.strftime(
-    dt.datetime.now() - dt.timedelta(days=1), '%Y_%m_%d')
-outputCsvPath = 'output/nldc/nldc_remc_data_{0}.csv'.format(yestDateStr)
+# get reportFor date from excel
+templWb = load_workbook(srcReportPath)
+dateStr = templWb[srcShNames[0]]["K3"].value.strftime('%Y-%m-%d')
+setReportForDate(dateStr)
+templWb.close()
+
+reportDate = getReportForDate()
+outputCsvPath = f'output/nldc/nldc_remc_data_{reportDate.strftime("%Y_%m_%d")}.csv'
 generateNldcReport(srcReportPath, srcShNames, outputCsvPath)
 printWithTs('NLDC Report preparation done !', clr='green')
 
 # PDF output path
-reqDt = dt.datetime.now()-dt.timedelta(days=1)
-pdf_file_path = os.path.abspath(f'output/pdfs/REMC report_Night_{dt.datetime.strftime(reqDt, "%d_%m_%Y")}.pdf')
+pdf_file_path = os.path.abspath(
+    f'output/pdfs/REMC report_Night_{reportDate.strftime("%d_%m_%Y")}.pdf')
 
 # List of sheet names to be printed
 sheet_names = ["Daily REMC Report_Part1", "Daily REMC Report_Part2", "Daily REMC Report_Part3",
@@ -31,6 +35,7 @@ excel = win32com.client.Dispatch("Excel.Application")
 # excel.Visible = False  # Optional: Hide Excel window
 
 # Open the Excel workbook
+excel_file_path = os.path.abspath(srcReportPath)
 workbook = excel.Workbooks.Open(excel_file_path)
 
 # Create an empty list to store the worksheet objects

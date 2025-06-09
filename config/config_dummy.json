@@ -6,5 +6,6 @@
     "wbesApiBase": "",
     "wbesapiKey": "",
     "wbesUname": "",
-    "wbesPwd": ""
+    "wbesPwd": "",
+    "reportForDate": "1"
 }

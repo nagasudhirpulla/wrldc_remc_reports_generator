@@ -1,9 +1,10 @@
 import pandas as pd
 import datetime as dt
 import os
+from utils.dateUtils import getReportForDate
 
 def getDateStr(numDays):
-    reqDate = dt.datetime.now() + dt.timedelta(days=numDays)
+    reqDate = getReportForDate() + dt.timedelta(days=numDays+1)
     return dt.datetime.strftime(reqDate, '%Y-%m-%d')
         
 def fetchFcaDayAheadDf():
