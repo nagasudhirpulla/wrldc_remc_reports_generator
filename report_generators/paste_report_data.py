@@ -44,7 +44,7 @@ def pasteDataToTemplateFile(dataFile, templateFile):
 
     printWithTs('done pasting data to template', clr='green')
     # TODO avoid hard coding
-    templWb["Daily REMC Report_Part1"]["K3"] = getReportForDate()+dt.timedelta(days=1)
+    templWb["Daily REMC Report_Part1"]["K3"] = getReportForDate()
     # saving the destination excel file
     printWithTs('Saving report template after pasting')
     templWb.save(str(templateFile))
